@@ -1,0 +1,33 @@
+{% extends "providers/base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+<h3 class="mb-4">Add New Service</h3>
+
+<form method="POST" enctype="multipart/form-data">
+
+{% csrf_token %}
+
+<label>Title</label>
+<input type="text" name="title" class="form-control" required>
+
+<label>Description</label>
+<textarea name="description" class="form-control" required></textarea>
+
+<label>Price</label>
+<input type="number" name="price" class="form-control" required>
+
+<label>Images</label>
+<input type="file" name="images" multiple class="form-control">
+
+<button class="btn btn-success mt-3">
+Create Service
+</button>
+
+</form>
+
+</div>
+
+{% endblock %}

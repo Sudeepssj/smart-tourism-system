@@ -1,0 +1,226 @@
+{% extends "adminpanel/base.html" %}
+{% block content %}
+
+<div class="card shadow-sm">
+
+<div class="card-header d-flex justify-content-between align-items-center">
+<h5>Pending Providers</h5>
+
+<input type="text"
+id="searchInput"
+class="form-control form-control-sm w-25"
+placeholder="Search providers...">
+</div>
+
+<div class="card-body p-0">
+
+<table class="table table-hover mb-0">
+
+<thead class="table-light">
+<tr>
+<th>Username</th>
+<th>Business Name</th>
+<th>District</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody id="providerTable">
+
+{% for provider in providers %}
+
+<tr>
+
+<td>{{ provider.user.username }}</td>
+
+<td>{{ provider.business_name }}</td>
+
+<td>{{ provider.district.name }}</td>
+
+<td>
+
+<button class="btn btn-info btn-sm viewBtn"
+
+data-username="{{ provider.user.username }}"
+data-business="{{ provider.business_name }}"
+data-phone="{{ provider.phone }}"
+data-district="{{ provider.district.name }}"
+data-address="{{ provider.full_address }}"
+data-subcategory="{{ provider.subcategory.name }}">
+
+View
+
+</button>
+
+<button class="btn btn-success btn-sm approveBtn"
+data-id="{{ provider.id }}">
+Approve
+</button>
+
+<button class="btn btn-danger btn-sm rejectBtn"
+data-id="{{ provider.id }}">
+Reject
+</button>
+
+</td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+<td colspan="4" class="text-center p-3">
+No pending providers
+</td>
+</tr>
+
+{% endfor %}
+
+</tbody>
+</table>
+
+</div>
+</div>
+
+
+<!-- Provider Detail Modal -->
+
+<div class="modal fade" id="providerModal" tabindex="-1">
+<div class="modal-dialog">
+<div class="modal-content">
+
+<div class="modal-header">
+<h5 class="modal-title">Provider Details</h5>
+<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+</div>
+
+<div class="modal-body">
+
+<p><strong>Username:</strong> <span id="modalUsername"></span></p>
+
+<p><strong>Business Name:</strong> <span id="modalBusiness"></span></p>
+
+<p><strong>Phone:</strong> <span id="modalPhone"></span></p>
+
+<p><strong>District:</strong> <span id="modalDistrict"></span></p>
+
+<p><strong>Sub Category:</strong> <span id="modalSubcategory"></span></p>
+
+<p><strong>Address:</strong> <span id="modalAddress"></span></p>
+
+</div>
+
+</div>
+</div>
+</div>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function(){
+
+function updateStatus(providerId, action, row){
+
+fetch("{% url 'update_provider_status' %}", {
+
+method: "POST",
+
+headers:{
+"X-CSRFToken": "{{ csrf_token }}",
+"Content-Type":"application/x-www-form-urlencoded"
+},
+
+body:`provider_id=${providerId}&action=${action}`
+
+})
+
+.then(response=>response.json())
+
+.then(data=>{
+
+if(data.success){
+
+row.style.opacity="0";
+
+setTimeout(()=>{
+row.remove();
+
+let counter=document.getElementById("sidebarPendingCount");
+
+if(counter){
+counter.innerText=parseInt(counter.innerText)-1;
+}
+
+},300)
+
+}
+
+})
+
+}
+
+
+document.querySelectorAll(".approveBtn").forEach(btn=>{
+btn.addEventListener("click",function(){
+const row=this.closest("tr")
+updateStatus(this.dataset.id,"approve",row)
+})
+})
+
+document.querySelectorAll(".rejectBtn").forEach(btn=>{
+btn.addEventListener("click",function(){
+const row=this.closest("tr")
+updateStatus(this.dataset.id,"reject",row)
+})
+})
+
+})
+
+</script>
+
+
+<script>
+
+$(document).ready(function(){
+
+$("#searchInput").on("keyup",function(){
+
+var value=$(this).val().toLowerCase()
+
+$("#providerTable tr").filter(function(){
+
+$(this).toggle($(this).text().toLowerCase().indexOf(value)>-1)
+
+})
+
+})
+
+})
+
+</script>
+
+
+<script>
+
+document.querySelectorAll(".viewBtn").forEach(btn=>{
+
+btn.addEventListener("click",function(){
+
+document.getElementById("modalUsername").innerText=this.dataset.username
+document.getElementById("modalBusiness").innerText=this.dataset.business
+document.getElementById("modalPhone").innerText=this.dataset.phone
+document.getElementById("modalDistrict").innerText=this.dataset.district
+document.getElementById("modalSubcategory").innerText=this.dataset.subcategory
+document.getElementById("modalAddress").innerText=this.dataset.address
+
+var modal=new bootstrap.Modal(document.getElementById("providerModal"))
+
+modal.show()
+
+})
+
+})
+
+</script>
+
+{% endblock %}

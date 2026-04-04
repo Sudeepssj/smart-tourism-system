@@ -1,0 +1,47 @@
+{% extends "adminpanel/base.html" %}
+{% block content %}
+
+<div class="container-fluid page-content">
+
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+
+            <div class="dashboard-card">
+
+                <h4 class="mb-4">➕ Add New District</h4>
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label">District Name</label>
+                        <input type="text" name="name" class="form-control" placeholder="Enter district name" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">State</label>
+                        <input type="text" name="state" class="form-control" placeholder="Enter state name" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">
+                        Add District
+                    </button>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends "adminpanel/base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="row g-4">
+
+        <div class="col-lg-3 col-md-6">
+            <div class="dashboard-card users">
+                <h6>Total Users</h6>
+                <h2>{{ total_users }}</h2>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="dashboard-card providers">
+                <h6>Total Providers</h6>
+                <h2>{{ total_providers }}</h2>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="dashboard-card pending">
+                <h6>Pending Providers</h6>
+                <h2>{{ pending_count }}</h2>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="dashboard-card districts">
+                <h6>Total Districts</h6>
+                <h2>{{ total_districts }}</h2>
+            </div>
+        </div>
+
+
+      
+
+    </div>
+
+</div>
+<!-- 
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+    function updateStatus(providerId, action) {
+
+        fetch("{% url 'update_provider_status' %}", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: `provider_id=${providerId}&action=${action}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.success) {
+                document.getElementById("row-" + providerId).remove();
+                document.getElementById("pendingCount").innerText = data.pending_count;
+            }
+        });
+    }
+
+    document.querySelectorAll(".approveBtn").forEach(btn => {
+        btn.addEventListener("click", function() {
+            updateStatus(this.dataset.id, "approve");
+        });
+    });
+
+    document.querySelectorAll(".rejectBtn").forEach(btn => {
+        btn.addEventListener("click", function() {
+            updateStatus(this.dataset.id, "reject");
+        });
+    });
+
+});
+</script> -->
+
+{% endblock %}

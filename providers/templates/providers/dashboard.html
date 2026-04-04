@@ -1,0 +1,66 @@
+{% extends "providers/base.html" %} {% block content %}
+
+<div>
+  <div class="row mb-4">
+    <div class="col">
+      <h3 class="fw-bold">Dashboard</h3>
+      <p class="text-muted">Welcome back, manage your business efficiently.</p>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Business Category Card -->
+    <div class="col-lg-3 col-md-6">
+      <div class="dashboard-card">
+        <div class="card-icon bg-primary">
+          <i class="fas fa-layer-group"></i>
+        </div>
+        <div>
+          <h6>Business Category</h6>
+          <h5>{{ provider.subcategory.name }}</h5>
+        </div>
+      </div>
+    </div>
+
+    <!-- Status Card -->
+    <div class="col-lg-3 col-md-6">
+      <div class="dashboard-card">
+        <div class="card-icon bg-success">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <div>
+          <h6>Status</h6>
+          <h5 class="text-capitalize">{{ provider.status }}</h5>
+        </div>
+      </div>
+    </div>
+
+    <!-- Services Count -->
+    <div class="col-lg-3 col-md-6">
+      <div class="dashboard-card">
+        <div class="card-icon bg-warning">
+          <i class="fas fa-briefcase"></i>
+        </div>
+        <div>
+          <h6>Total Services</h6>
+          <h5>{{ total_services }}</h5>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reviews Count -->
+    <div class="col-lg-3 col-md-6">
+      <div class="dashboard-card">
+        <div class="card-icon bg-danger">
+          <i class="fas fa-star"></i>
+        </div>
+        <div>
+          <h6>Total Reviews</h6>
+          <h5>{{ total_reviews }}</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

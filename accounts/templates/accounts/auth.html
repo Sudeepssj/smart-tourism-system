@@ -1,0 +1,198 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Tourism</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'accounts/css/auth.css' %}">
+</head>
+
+<body>
+
+<div class="split-container">
+
+    <!-- LEFT SIDE IMAGE -->
+    <div class="left-panel">
+        <div class="overlay">
+            <h1>🌍 Smart Tourism</h1>
+            <p>Discover the beauty of travel</p>
+        </div>
+    </div>
+
+    <!-- RIGHT SIDE AUTH -->
+    <div class="right-panel">
+
+        <div class="auth-card">
+
+            <!-- Toggle -->
+            <div class="auth-toggle">
+                <button id="loginBtn" class="active">Login</button>
+                <button id="userSignupBtn">User</button>
+                <button id="providerSignupBtn">Provider</button>
+            </div>
+
+            <div class="form-wrapper">
+                <div class="form-slider">
+
+                    <!-- LOGIN -->
+                    <form method="POST" action="{% url 'auth_page' %}" class="form">
+                        {% csrf_token %}
+                        <input type="hidden" name="form_type" value="login">
+
+                        <div class="input-group">
+                            <i class="fa fa-user"></i>
+                            <input type="text" name="username" placeholder="Username" required>
+                        </div>
+
+                        <div class="input-group">
+                            <i class="fa fa-lock"></i>
+                            <input type="password" name="password" placeholder="Password" required id="loginPassword">
+                            <i class="fa fa-eye toggle-password" data-target="loginPassword"></i>
+                        </div>
+
+                        <button class="primary-btn">Login</button>
+                    </form>
+
+
+                    <!-- USER SIGNUP -->
+                    <form method="POST" action="{% url 'auth_page' %}" class="form">
+                        {% csrf_token %}
+                        <input type="hidden" name="form_type" value="user_signup">
+
+                        <div class="input-group">
+                            <i class="fa fa-user"></i>
+                            <input type="text" name="username" placeholder="Username" required>
+                        </div>
+
+                        <div class="input-group">
+                            <i class="fa fa-envelope"></i>
+                            <input type="email" name="email" placeholder="Email" required>
+                        </div>
+
+                        <div class="input-group">
+                            <i class="fa fa-lock"></i>
+                            <input type="password" name="password" placeholder="Password" required id="userPassword">
+                            <i class="fa fa-eye toggle-password" data-target="userPassword"></i>
+                        </div>
+
+                        <button class="primary-btn">Register as User</button>
+                    </form>
+
+
+                    <!-- PROVIDER SIGNUP -->
+                    <form method="POST" action="{% url 'auth_page' %}" class="form">
+                        {% csrf_token %}
+                        <input type="hidden" name="form_type" value="provider_signup">
+
+                        <div class="scroll-area">
+
+                            <div class="input-group">
+                                <i class="fa fa-user"></i>
+                                <input type="text" name="username" placeholder="Username" required>
+                            </div>
+
+                            <div class="input-group">
+                                <i class="fa fa-envelope"></i>
+                                <input type="email" name="email" placeholder="Email" required>
+                            </div>
+
+                            <div class="input-group">
+                                <i class="fa fa-lock"></i>
+                                <input type="password" name="password" placeholder="Password" required id="providerPassword">
+                                <i class="fa fa-eye toggle-password" data-target="providerPassword"></i>
+                            </div>
+
+                            
+
+                            <div class="input-group">
+                                <i class="fa fa-phone"></i>
+                                <input type="text" name="phone" placeholder="Phone Number" required>
+                            </div>
+                            
+
+
+                            <div class="input-group">
+                                <i class="fa fa-building"></i>
+                                <input type="text" name="business_name" placeholder="Business Title" required>
+                            </div>
+
+                            <div class="input-group">
+                                <i class="fa fa-map-marker-alt"></i>
+                                <select name="district" required>
+                                    <option value="">Select District</option>
+                                    {% for d in districts %}
+                                    <option value="{{ d.id }}">{{ d.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="input-group">
+                                <i class="fa fa-tags"></i>
+                                <!-- Main Category -->
+                                <div class="input-group">
+                                    <i class="fa fa-layer-group"></i>
+                                    <select name="main_category" id="mainCategory" required>
+                                        <option value="">Select Main Category</option>
+                                        {% for mc in main_categories %}
+                                        <option value="{{ mc.id }}">{{ mc.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <!-- Sub Category -->
+                                <div class="input-group">
+                                    <i class="fa fa-tags"></i>
+                                    <select name="subcategory" id="subCategory" required disabled>
+                                        <option value="">Select Sub Category</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <button class="primary-btn">Register as Provider</button>
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'accounts/js/auth.js' %}"></script>
+<script>
+document.getElementById("mainCategory").addEventListener("change", function() {
+
+    const mainCategoryId = this.value;
+    const subCategorySelect = document.getElementById("subCategory");
+
+    subCategorySelect.innerHTML = '<option value="">Loading...</option>';
+    subCategorySelect.disabled = true;
+
+    fetch(`/accounts/get-subcategories/?main_category_id=${mainCategoryId}`)
+        .then(response => response.json())
+        .then(data => {
+
+            subCategorySelect.innerHTML = '<option value="">Select Sub Category</option>';
+
+            data.forEach(sub => {
+                subCategorySelect.innerHTML += 
+                    `<option value="${sub.id}">${sub.name}</option>`;
+            });
+
+            subCategorySelect.disabled = false;
+        });
+
+});
+</script>
+</body>
+</html>

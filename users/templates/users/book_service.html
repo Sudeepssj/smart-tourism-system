@@ -1,0 +1,58 @@
+{% extends "users/base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+<h3 class="mb-4">Book {{ service.title }}</h3>
+
+<div class="card shadow-sm p-4">
+
+<form method="POST">
+
+{% csrf_token %}
+
+<div class="mb-3">
+<label>Check In</label>
+<input type="date" name="check_in" class="form-control" name="{{ today }}">
+</div>
+
+<div class="mb-3">
+<label>Check Out</label>
+<input type="date" name="check_out" class="form-control">
+</div>
+
+<div class="mb-3">
+<label>Guests / Quantity</label>
+<input type="number" name="quantity" value="1" class="form-control">
+</div>
+
+<div class="mb-3">
+<label>Phone</label>
+<input type="text" name="phone" class="form-control">
+</div>
+
+<div class="mb-3">
+<label>Special Request</label>
+<textarea name="special_request" class="form-control"></textarea>
+</div>
+
+<button class="btn btn-success w-100">
+Confirm Booking
+</button>
+
+</form>
+
+</div>
+
+</div>
+<script>
+document.querySelector("input[name='check_in']").addEventListener("change", function(){
+
+    let checkin = this.value;
+    document.querySelector("input[name='check_out']").min = checkin;
+
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends "adminpanel/base.html" %}
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="dashboard-card">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4>📋 Manage Districts</h4>
+            <input type="text" id="searchInput" class="form-control w-25" placeholder="Search...">
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>District</th>
+                        <th>State</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="districtTable">
+
+                    {% for d in districts %}
+                    <tr id="row-{{ d.id }}">
+                        <td>{{ d.id }}</td>
+                        <td class="name">{{ d.name }}</td>
+                        <td class="state">{{ d.state }}</td>
+                        <td>
+                            <button class="btn btn-sm btn-warning editBtn"
+                                data-id="{{ d.id }}"
+                                data-name="{{ d.name }}"
+                                data-state="{{ d.state }}">
+                                Edit
+                            </button>
+
+                            <button class="btn btn-sm btn-danger deleteBtn"
+                                data-id="{{ d.id }}">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Edit District</h5>
+                <button class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editId">
+                <div class="mb-2">
+                    <input type="text" id="editName" class="form-control">
+                </div>
+                <div>
+                    <input type="text" id="editState" class="form-control">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="saveEdit">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

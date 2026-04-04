@@ -1,0 +1,109 @@
+{% extends "providers/base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+<h3 class="mb-4">Bookings</h3>
+
+<table class="table table-bordered table-hover">
+
+<thead class="table-dark">
+
+<tr>
+
+<th>Booking ID</th>
+<th>Service</th>
+<th>Customer</th>
+<th>Phone</th>
+<th>Date</th>
+<th>Qty</th>
+<th>Status</th>
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for booking in bookings %}
+
+<tr>
+
+<td>{{ booking.booking_id }}</td>
+
+<td>{{ booking.service.title }}</td>
+
+<td>{{ booking.user.username }}</td>
+
+<td>{{ booking.phone }}</td>
+
+<td>
+
+{% if booking.check_in %}
+{{ booking.check_in }} → {{ booking.check_out }}
+{% else %}
+{{ booking.booking_date }}
+{% endif %}
+
+</td>
+
+<td>{{ booking.quantity }}</td>
+
+<td>
+
+{% if booking.status == "pending" %}
+<span class="badge bg-warning">Pending</span>
+
+{% elif booking.status == "confirmed" %}
+<span class="badge bg-success">Confirmed</span>
+
+{% elif booking.status == "rejected" %}
+<span class="badge bg-danger">Rejected</span>
+
+{% endif %}
+
+</td>
+
+<td>
+
+{% if booking.status == "pending" %}
+
+<a href="{% url 'booking_status_update' booking.booking_id 'confirmed' %}"
+class="btn btn-sm btn-success">
+Confirm
+</a>
+
+<a href="{% url 'booking_status_update' booking.booking_id 'rejected' %}"
+class="btn btn-sm btn-danger">
+Reject
+</a>
+
+{% else %}
+
+—
+
+{% endif %}
+
+</td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+<td colspan="8" class="text-center">
+No bookings yet
+</td>
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+{% endblock %}

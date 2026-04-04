@@ -1,0 +1,43 @@
+{% extends "users/base.html" %}
+
+{% block content %}
+
+<h3 class="mb-4">{{ category.name }}</h3>
+
+<div class="row g-4">
+
+{% for sub in subcategories %}
+
+<div class="col-md-3">
+
+<a href="{% url 'services_by_subcategory' sub.id %}" style="text-decoration:none; color:black;">
+
+<div class="card shadow-sm h-100">
+
+{% if sub.image %}
+<img src="{{ sub.image.url }}"
+class="card-img-top"
+style="height:180px; object-fit:cover;">
+{% else %}
+<img src="https://via.placeholder.com/400x250?text=No+Image"
+class="card-img-top"
+style="height:180px; object-fit:cover;">
+{% endif %}
+
+<div class="card-body text-center">
+
+<h6>{{ sub.name }}</h6>
+
+</div>
+
+</div>
+
+</a>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% endblock %}

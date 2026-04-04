@@ -1,0 +1,101 @@
+{% extends "adminpanel/base.html" %}
+
+{% block content %}
+
+<style>
+
+#mainCategoryTable tbody tr{
+transition:0.2s;
+}
+
+#mainCategoryTable tbody tr:hover td{
+background:#eef2f7;
+cursor:pointer;
+box-shadow: inset 4px 0 0 #0d6efd;
+}
+
+</style>
+
+<h3>Main Categories</h3>
+
+<a href="{% url 'admin_add_main_category' %}" class="btn btn-primary mb-3">
+Add Category
+</a>
+
+<!-- Search Box -->
+
+<input type="text"
+id="mainCategorySearch"
+class="form-control mb-3"
+placeholder="🔍 Search Main Category...">
+
+<table class="table table-bordered" id="mainCategoryTable">
+
+<thead>
+<tr>
+<th>Sl No</th>
+<th>Name</th>
+<th>Actions</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for c in categories %}
+
+<tr>
+
+<td>{{ forloop.counter }}</td>
+
+<td>{{ c.name }}</td>
+
+<td>
+
+<a href="{% url 'edit_main_category' c.id %}"
+class="btn btn-sm btn-warning">
+Edit
+</a>
+
+<a href="{% url 'delete_main_category' c.id %}"
+class="btn btn-sm btn-danger"
+onclick="return confirm('Delete this category?')">
+Delete
+</a>
+
+</td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+<td colspan="3" class="text-center">
+No categories found
+</td>
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+<!-- jQuery Search Script -->
+
+<script>
+
+$("#mainCategorySearch").on("keyup", function () {
+
+var value = $(this).val().toLowerCase();
+
+$("#mainCategoryTable tbody tr").filter(function () {
+
+$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+
+});
+
+});
+
+</script>
+
+{% endblock %}

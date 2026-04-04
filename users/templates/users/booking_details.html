@@ -1,0 +1,61 @@
+{% extends "users/base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+<h3 class="mb-4">Booking Details</h3>
+
+<div class="card shadow-sm">
+
+<div class="card-body">
+
+<h5 class="mb-3">Booking ID: {{ booking.booking_id }}</h5>
+
+<hr>
+
+<p><strong>Service:</strong> {{ booking.service.title }}</p>
+
+<p><strong>Provider:</strong> {{ booking.provider.business_name }}</p>
+
+<p><strong>Status:</strong>
+<span class="badge 
+{% if booking.status == 'pending' %}bg-warning
+{% elif booking.status == 'confirmed' %}bg-success
+{% elif booking.status == 'rejected' %}bg-danger
+{% elif booking.status == 'completed' %}bg-primary
+{% endif %}
+">
+{{ booking.status }}
+</span>
+</p>
+
+<hr>
+
+<p><strong>Check In:</strong> {{ booking.check_in|default:"Not selected" }}</p>
+<p><strong>Check Out:</strong> {{ booking.check_out|default:"Not selected" }}</p>
+
+<p><strong>Guests:</strong> {{ booking.quantity }}</p>
+
+<p><strong>Phone:</strong> {{ booking.phone }}</p>
+
+{% if booking.special_request %}
+<p><strong>Special Request:</strong> {{ booking.special_request }}</p>
+{% endif %}
+
+<hr>
+
+<p class="text-muted">
+Booked On: {{ booking.created_at }}
+</p>
+
+</div>
+
+</div>
+
+</div>
+<div class="text-center"><a href="{% url 'user_dashboard' %}" class="btn btn-outline-primary mt-3 ">
+← Back to Dashboard
+</a></div>
+
+{% endblock %}

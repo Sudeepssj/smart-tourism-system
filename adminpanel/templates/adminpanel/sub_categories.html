@@ -1,0 +1,120 @@
+{% extends "adminpanel/base.html" %}
+
+{% block content %}
+<style>
+
+table img{
+height:50px;
+width:60px;
+object-fit:cover;
+border-radius:6px;
+}
+
+#subcategoryTable tbody tr{
+transition:0.2s;
+}
+
+/* #subcategoryTable tbody tr:hover td{
+background:#eef2f7;
+cursor:pointer;
+} */
+#subcategoryTable tbody tr:hover td{
+background:#eef2f7;
+cursor:pointer;
+box-shadow: inset 4px 0 0 #0d6efd;
+}
+
+</style>
+<h3>Sub Categories</h3>
+
+<a href="{% url 'admin_add_sub_category' %}" class="btn btn-primary mb-3">
+Add Sub Category
+</a>
+
+<div class="mb-3">
+<input type="text"
+id="subcategorySearch"
+class="form-control"
+placeholder="🔍 Search Sub Category or Main Category...">
+</div>
+
+<table class="table table-bordered" id="subcategoryTable">
+
+<thead>
+<tr>
+<th>Sl No</th>
+<th>Image</th>
+<th>Name</th>
+<th>Main Category</th>
+<th>Actions</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for s in subcategories %}
+
+<tr>
+
+<td>{{ forloop.counter }}</td>
+
+<td>
+{% if s.image %}
+<img src="{{ s.image.url }}" width="60" style="border-radius:6px;">
+{% else %}
+<span class="text-muted">No Image</span>
+{% endif %}
+</td>
+
+<td>{{ s.name }}</td>
+
+<td>{{ s.main_category.name }}</td>
+
+<td>
+
+<a href="{% url 'edit_sub_category' s.id %}"
+class="btn btn-sm btn-warning">
+Edit
+</a>
+
+<a href="{% url 'delete_sub_category' s.id %}"
+class="btn btn-sm btn-danger"
+onclick="return confirm('Delete this subcategory?')">
+Delete
+</a>
+
+</td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+<td colspan="4" class="text-center">
+No sub categories found
+</td>
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+<script>
+
+$("#subcategorySearch").on("keyup", function () {
+
+    var value = $(this).val().toLowerCase();
+
+    $("#subcategoryTable tbody tr").filter(function () {
+
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+
+    });
+
+});
+
+</script>
+
+{% endblock %}

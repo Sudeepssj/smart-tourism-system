@@ -1,0 +1,68 @@
+{% extends "adminpanel/base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+<h3>Edit Sub Category</h3>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+<div class="mb-3">
+
+<label>Sub Category Name</label>
+
+<input type="text"
+name="name"
+class="form-control"
+value="{{ subcategory.name }}"
+required>
+
+</div>
+
+<div class="mb-3">
+
+<label>Main Category</label>
+
+<select name="category" class="form-control">
+
+{% for c in categories %}
+
+<option value="{{ c.id }}"
+{% if c.id == subcategory.main_category.id %}selected{% endif %}>
+{{ c.name }}
+</option>
+
+{% endfor %}
+
+</select>
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">Sub Category Image</label>
+
+<input type="file" name="image" class="form-control">
+
+{% if subcategory.image %}
+<br>
+<img src="{{ subcategory.image.url }}" width="120">
+{% endif %}
+
+</div>
+
+<button class="btn btn-primary">
+Update
+</button>
+
+<a href="{% url 'admin_sub_categories' %}" class="btn btn-secondary">
+Cancel
+</a>
+
+</form>
+
+</div>
+
+{% endblock %}

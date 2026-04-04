@@ -1,0 +1,36 @@
+{% extends "adminpanel/base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+<h3>Edit Main Category</h3>
+
+<form method="POST">
+{% csrf_token %}
+
+<div class="mb-3">
+
+<label>Category Name</label>
+
+<input type="text"
+name="name"
+class="form-control"
+value="{{ category.name }}"
+required>
+
+</div>
+
+<button class="btn btn-primary">
+Update
+</button>
+
+<a href="{% url 'admin_main_categories' %}" class="btn btn-secondary">
+Cancel
+</a>
+
+</form>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "providers/base.html" %}
+{% block content %}
+
+<div class="container mt-4">
+    <div class="card shadow p-4">
+        <h4 class="mb-3">Complete Your Business Profile</h4>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label>Business Description</label>
+                <textarea name="business_description" class="form-control" required></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label>Full Address</label>
+                <textarea name="full_address" class="form-control" required></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label>Website</label>
+                <input type="url" name="website" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label>Google Map Link</label>
+                <input type="url" name="google_map_link" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label>Business Logo</label>
+                <input type="file" name="logo" class="form-control" required>
+            </div>
+
+            <button class="btn btn-primary">Save & Continue</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

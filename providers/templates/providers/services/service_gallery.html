@@ -1,0 +1,104 @@
+{% extends "providers/base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+<h3 class="mb-4">{{ service.title }} Gallery</h3>
+
+<!-- Centered Medium Slider -->
+<div class="row justify-content-center">
+
+<div class="col-lg-8">
+
+<div id="galleryCarousel"
+     class="carousel slide mb-4"
+     data-bs-ride="carousel"
+     data-bs-interval="3000">
+
+<div class="carousel-inner">
+
+{% for img in images %}
+
+<div class="carousel-item {% if forloop.first %}active{% endif %}">
+
+<img src="{{ img.image.url }}"
+class="d-block w-100 rounded"
+style="height:350px; object-fit:cover;">
+
+</div>
+
+{% endfor %}
+
+</div>
+
+<button class="carousel-control-prev"
+type="button"
+data-bs-target="#galleryCarousel"
+data-bs-slide="prev">
+
+<span class="carousel-control-prev-icon"></span>
+
+</button>
+
+<button class="carousel-control-next"
+type="button"
+data-bs-target="#galleryCarousel"
+data-bs-slide="next">
+
+<span class="carousel-control-next-icon"></span>
+
+</button>
+
+</div>
+
+</div>
+</div>
+
+<hr>
+
+<h5>Service Images</h5>
+
+<div class="row">
+
+{% for img in images %}
+
+<div class="col-md-3 mb-3 text-center">
+
+<img src="{{ img.image.url }}"
+class="img-fluid rounded mb-2"
+style="height:150px; object-fit:cover;">
+
+<a href="{% url 'service_image_delete' img.id %}"
+class="btn btn-sm btn-danger">
+Delete
+</a>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+<hr>
+
+<h5>Add New Images</h5>
+
+<form method="POST" enctype="multipart/form-data">
+
+{% csrf_token %}
+
+<input type="file"
+name="images"
+multiple
+class="form-control mb-3">
+
+<button class="btn btn-primary">
+Upload Images
+</button>
+
+</form>
+
+</div>
+
+{% endblock %}

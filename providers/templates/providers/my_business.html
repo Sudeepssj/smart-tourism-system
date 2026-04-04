@@ -1,0 +1,129 @@
+{% extends "providers/base.html" %}
+{% block content %}
+
+<div class="container-fluid mt-4">
+
+    <!-- HEADER CARD -->
+    <div class="card shadow-sm p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+
+            <div class="d-flex align-items-center gap-4">
+                {% if provider.logo %}
+                    <img src="{{ provider.logo.url }}" width="90" height="90"
+                         class="rounded-circle border">
+                {% else %}
+                    <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center"
+                         style="width:90px;height:90px;color:white;">
+                        No Logo
+                    </div>
+                {% endif %}
+
+                <div>
+                    <h3 class="mb-1">{{ provider.business_name }}</h3>
+                    <p class="mb-1 text-muted">
+                        {{ provider.subcategory.main_category.name }} →
+                        {{ provider.subcategory.name }}
+                    </p>
+                    <span class="badge bg-success">
+                        {{ provider.status|title }}
+                    </span>
+                </div>
+            </div>
+
+            <a 
+             href="{% url 'provider_edit_business' %}" 
+               class="btn btn-primary">
+                Edit Business Profile
+            </a>
+            
+
+        </div>
+    </div>
+
+
+    <!-- BUSINESS INFO CARD -->
+    <div class="card shadow-sm p-4 mb-4">
+        <h5 class="mb-3">Business Information</h5>
+
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Description:</strong><br>
+                    {{ provider.business_description|default:"Not added yet" }}
+                </p>
+
+                <p><strong>Full Address:</strong><br>
+                    {{ provider.full_address|default:"Not added yet" }}
+                </p>
+            </div>
+
+            <div class="col-md-6">
+                <p><strong>Phone:</strong>
+                    {{ provider.phone }}
+                </p>
+
+                <p><strong>Alternate Phone:</strong>
+                    {{ provider.alternate_phone|default:"-" }}
+                </p>
+
+                <p><strong>Email:</strong>
+                    {{ provider.business_email|default:"-" }}
+                </p>
+
+                <p><strong>Website:</strong>
+                    {% if provider.website %}
+                        <a href="{{ provider.website }}" target="_blank">
+                            {{ provider.website }}
+                        </a>
+                    {% else %}
+                        -
+                    {% endif %}
+                </p>
+
+                <p><strong>Google Map:</strong>
+                    {% if provider.google_map_link %}
+                        <a href="{{ provider.google_map_link }}" target="_blank">
+                            View Location
+                        </a>
+                    {% else %}
+                        -
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- TIMING CARD -->
+    <div class="card shadow-sm p-4 mb-4">
+        <h5 class="mb-3">Business Timings</h5>
+
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Opening Time:</strong>
+                    {{ provider.opening_time|default:"Not set" }}
+                </p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Closing Time:</strong>
+                    {{ provider.closing_time|default:"Not set" }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- COVER IMAGE -->
+    <div class="card shadow-sm p-4">
+        <h5 class="mb-3">Cover Image</h5>
+
+        {% if provider.cover_image %}
+            <img src="{{ provider.cover_image.url }}"
+                 class="img-fluid rounded">
+        {% else %}
+            <p>No cover image uploaded.</p>
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,137 @@
+{% extends "providers/base.html" %}
+{% block content %}
+
+<div class="container-fluid mt-4">
+
+    <div class="card shadow-sm p-4">
+
+        <h4 class="mb-4">Edit Business Profile</h4>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="row">
+
+                <!-- LEFT COLUMN -->
+                <div class="col-md-6">
+
+                    <div class="mb-3">
+                        <label>Business Name</label>
+                        <input type="text" name="business_name"
+                               value="{{ provider.business_name }}"
+                               class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Description</label>
+                        <textarea name="business_description"
+                                  class="form-control" rows="4">{{ provider.business_description }}</textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Full Address</label>
+                        <textarea name="full_address"
+                                  class="form-control" rows="3">{{ provider.full_address }}</textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Phone</label>
+                        <input type="text" name="phone"
+                               value="{{ provider.phone }}"
+                               class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Alternate Phone</label>
+                        <input type="text" name="alternate_phone"
+                               value="{{ provider.alternate_phone }}"
+                               class="form-control">
+                    </div>
+
+                </div>
+
+                <!-- RIGHT COLUMN -->
+                <div class="col-md-6">
+
+                    <div class="mb-3">
+                        <label>Email</label>
+                        <input type="email" name="business_email"
+                               value="{{ provider.business_email }}"
+                               class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Website</label>
+                        <input type="url" name="website"
+                               value="{{ provider.website }}"
+                               class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Google Map Link</label>
+                        <input type="url" name="google_map_link"
+                               value="{{ provider.google_map_link }}"
+                               class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Opening Time</label>
+                        <input type="time" name="opening_time"
+                               value="{{ provider.opening_time|time:'H:i' }}"
+                               class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Closing Time</label>
+                        <input type="time" name="closing_time"
+                               value="{{ provider.closing_time|time:'H:i' }}"
+                               class="form-control">
+                    </div>
+
+                </div>
+
+            </div>
+
+            <hr>
+
+            <!-- IMAGE PREVIEW SECTION -->
+            <div class="row mt-3">
+
+                <div class="col-md-6">
+                    <label>Logo</label><br>
+                    {% if provider.logo %}
+                        <img src="{{ provider.logo.url }}"
+                             width="120" class="mb-2 rounded">
+                    {% else %}
+                        <p>No logo uploaded</p>
+                    {% endif %}
+                    <input type="file" name="logo" class="form-control">
+                </div>
+
+                <div class="col-md-6">
+                    <label>Cover Image</label><br>
+                    {% if provider.cover_image %}
+                        <img src="{{ provider.cover_image.url }}"
+                             class="img-fluid mb-2 rounded"
+                             style="max-height:150px;">
+                    {% else %}
+                        <p>No cover image uploaded</p>
+                    {% endif %}
+                    <input type="file" name="cover_image" class="form-control">
+                </div>
+
+            </div>
+
+            <div class="mt-4 text-end">
+                <button class="btn btn-success">
+                    Save Changes
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

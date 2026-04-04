@@ -1,0 +1,46 @@
+{% extends "providers/base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+<h3>Edit Service</h3>
+
+<form method="POST">
+
+{% csrf_token %}
+
+<div class="mb-3">
+<label>Title</label>
+<input type="text" name="title"
+class="form-control"
+value="{{ service.title }}">
+</div>
+
+<div class="mb-3">
+<label>Description</label>
+<textarea name="description"
+class="form-control">{{ service.description }}</textarea>
+</div>
+
+<div class="mb-3">
+<label>Price</label>
+<input type="number"
+name="price"
+class="form-control"
+value="{{ service.price }}">
+</div>
+
+<button class="btn btn-success">
+Update Service
+</button>
+
+<a href="{% url 'service_list' %}" class="btn btn-secondary">
+Cancel
+</a>
+
+</form>
+
+</div>
+
+{% endblock %}

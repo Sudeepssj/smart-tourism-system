@@ -1,0 +1,153 @@
+{% extends "users/base.html" %}
+
+{% block content %}
+
+<style>
+
+.service-gallery img{
+height:420px;
+object-fit:cover;
+border-radius:10px;
+}
+
+.thumbnail-img{
+height:70px;
+width:100px;
+object-fit:cover;
+cursor:pointer;
+border-radius:6px;
+}
+
+.price{
+font-size:24px;
+font-weight:600;
+color:#0d6efd;
+}
+
+</style>
+
+<div class="container">
+
+<div class="row">
+
+<!-- IMAGE SLIDER -->
+
+<div class="col-lg-6 col-12 mb-4">
+
+<div id="serviceCarousel" class="carousel slide" data-bs-ride="carousel">
+
+<div class="carousel-inner service-gallery">
+
+{% for img in images %}
+
+<div class="carousel-item {% if forloop.first %}active{% endif %}">
+<img src="{{ img.image.url }}" class="d-block w-100">
+</div>
+
+{% endfor %}
+
+</div>
+
+<!-- Arrows -->
+
+<button class="carousel-control-prev"
+type="button"
+data-bs-target="#serviceCarousel"
+data-bs-slide="prev">
+
+<span class="carousel-control-prev-icon"></span>
+
+</button>
+
+<button class="carousel-control-next"
+type="button"
+data-bs-target="#serviceCarousel"
+data-bs-slide="next">
+
+<span class="carousel-control-next-icon"></span>
+
+</button>
+
+</div>
+
+<!-- Thumbnails -->
+
+<div class="d-flex gap-2 mt-3 flex-wrap">
+
+{% for img in images %}
+
+<img src="{{ img.image.url }}"
+class="thumbnail-img"
+data-bs-target="#serviceCarousel"
+data-bs-slide-to="{{ forloop.counter0 }}">
+
+{% endfor %}
+
+</div>
+
+</div>
+
+
+
+<!-- SERVICE DETAILS -->
+
+<div class="col-lg-6 col-12">
+
+<h3>{{ service.title }}</h3>
+
+<p class="text-muted">
+{{ service.provider.business_name }}
+</p>
+
+<p class="text-muted">
+📍 {{ service.provider.district.name }}
+</p>
+
+<p class="price">
+₹{{ service.price }}
+</p>
+
+<hr>
+
+<h5>Description</h5>
+
+<p>
+{{ service.description }}
+</p>
+
+<hr>
+
+<h5>Provider Info</h5>
+
+<p><strong>Phone:</strong> {{ service.provider.phone }}</p>
+
+<p><strong>Address:</strong> {{ service.provider.full_address }}</p>
+
+<hr>
+
+<a href="{% url 'create_booking' service.id %}" 
+class="btn btn-primary btn-lg w-100">
+Book Now
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* Auto slide every 3 seconds */
+
+const myCarousel = document.querySelector('#serviceCarousel')
+
+const carousel = new bootstrap.Carousel(myCarousel, {
+interval: 3000,
+ride: 'carousel'
+})
+
+</script>
+
+{% endblock %}

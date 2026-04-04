@@ -1,0 +1,69 @@
+{% extends "adminpanel/base.html" %}
+{% block content %}
+
+<div class="card shadow-sm">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5>Approved Providers</h5>
+
+        <input type="text"
+            id="approvedSearchInput"
+            class="form-control form-control-sm w-25"
+            placeholder="Search providers...">
+    </div>
+
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Name</th>
+                    <th>Title</th>
+                    <th>District</th>
+                </tr>
+            </thead>
+            <tbody id="approvedProviderTable">
+
+                {% for provider in providers %}
+                <tr>
+                    <td>{{ provider.business_name }}</td>
+                    <td>{{ provider.business_description }}</td>
+                    <td>{{ provider.district.name }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="text-center p-3">
+                        No approved providers
+                    </td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+$(document).ready(function () {
+
+    $("#approvedSearchInput").on("keyup", function () {
+
+        var value = $(this).val().toLowerCase();
+
+        $("#approvedProviderTable tr").each(function () {
+
+            var rowText = $(this).text().toLowerCase();
+
+            if (rowText.indexOf(value) > -1) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+
+        });
+
+    });
+
+});
+</script>
+
+
+{% endblock %}

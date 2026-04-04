@@ -1,0 +1,69 @@
+{% extends "adminpanel/base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="row">
+
+        <!-- Add District Form -->
+        <div class="col-lg-4 mb-4">
+            <div class="dashboard-card">
+                <h5>Add District</h5>
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label">District Name</label>
+                        <input type="text" name="name" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">State</label>
+                        <input type="text" name="state" class="form-control" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">
+                        Add District
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- District List -->
+        <div class="col-lg-8">
+            <div class="dashboard-card">
+                <h5>All Districts</h5>
+
+                <table class="table table-bordered mt-3">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>District</th>
+                            <th>State</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for district in districts %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ district.name }}</td>
+                            <td>{{ district.state }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3" class="text-center">No districts added</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
