@@ -10,6 +10,7 @@ urlpatterns = [
     path('adminpanel/', include('adminpanel.urls')),
     path("users/", include("users.urls")),
     path("bookings/", include("bookings.urls")),
+    path("reviews/", include("reviews.urls")),
     
 
 ]

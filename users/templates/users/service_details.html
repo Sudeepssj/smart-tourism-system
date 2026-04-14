@@ -24,6 +24,25 @@ font-weight:600;
 color:#0d6efd;
 }
 
+
+.star {
+    font-size: 28px;
+    cursor: pointer;
+    color: #ccc;
+    transition: 0.2s;
+}
+
+.star:hover,
+.star.selected {
+    color: gold;
+}
+
+.review-card {
+    border-radius: 10px;
+    padding: 15px;
+    background: #f8f9fa;
+}
+
 </style>
 
 <div class="container">
@@ -94,6 +113,10 @@ data-bs-slide-to="{{ forloop.counter0 }}">
 <div class="col-lg-6 col-12">
 
 <h3>{{ service.title }}</h3>
+<h5>
+⭐ {{ avg_rating|default:"0"|floatformat:1 }} / 5
+({{ reviews.count }} reviews)
+</h5>
 
 <p class="text-muted">
 {{ service.provider.business_name }}
@@ -129,13 +152,133 @@ data-bs-slide-to="{{ forloop.counter0 }}">
 class="btn btn-primary btn-lg w-100">
 Book Now
 </a>
+<hr>
 
+<h4>Write a Review</h4>
+{% if user.is_authenticated %}
+
+    {% if has_booked %}
+
+        <form method="POST" action="{% url 'add_review' service.id %}">
+        {% csrf_token %}
+
+        <!-- ⭐ Stars -->
+        <div id="starContainer">
+            {% for i in "12345" %}
+                <span class="star {% if user_review and user_review.rating >= forloop.counter %}selected{% endif %}"
+                    data-value="{{ forloop.counter }}">★</span>
+            {% endfor %}
+        </div>
+
+        <input type="hidden" name="rating" id="ratingInput"
+            value="{{ user_review.rating|default:'' }}" required>
+        <!-- ✏️ Prefill comment -->
+        <textarea name="comment"
+                  class="form-control mt-3"
+                  placeholder="Write your experience..."
+                  required>
+{{ user_review.comment|default:'' }}
+        </textarea>
+
+        <button class="btn btn-primary mt-3">
+            {% if user_reviewed %}
+                Update Review
+            {% else %}
+                Submit Review
+            {% endif %}
+        </button>
+
+        </form>
+
+    {% else %}
+        <p class="text-danger">⚠️ Complete booking to write a review</p>
+    {% endif %}
+
+{% else %}
+    <p>Please login to write a review</p>
+{% endif %}
+<hr>
+
+<h4>Customer Reviews</h4>
+
+{% for review in reviews %}
+
+<div class="review-card mb-3">
+
+    <strong>{{ review.user.username }}</strong>
+
+    <!-- ✅ Verified Badge -->
+    <div>
+        <small class="text-success">✔ Verified Booking</small>
+    </div>
+
+    <!-- ⭐ Stars -->
+    <div>
+        {% for i in "12345" %}
+            {% if forloop.counter <= review.rating %}
+                <span style="color:gold;">★</span>
+            {% else %}
+                <span style="color:#ccc;">★</span>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <p class="mt-2">{{ review.comment }}</p>
+
+    <small class="text-muted">
+        {{ review.created_at|date:"d M Y" }}
+    </small>
+
+    <!-- ✏️ Edit + ❌ Delete -->
+    {% if review.user == request.user %}
+    <div class="mt-2">
+        <a href="#reviewForm" class="btn btn-warning btn-sm">Edit</a>
+
+        <a href="{% url 'delete_review' service.id %}"
+           class="btn btn-danger btn-sm"
+           onclick="return confirm('Delete review?')">
+           Delete
+        </a>
+    </div>
+    {% endif %}
+
+</div>
+
+{% empty %}
+<p>No reviews yet</p>
+{% endfor %}
 </div>
 
 </div>
 
 </div>
+<script>
+document.addEventListener("DOMContentLoaded", function(){
 
+const stars = document.querySelectorAll(".star");
+const ratingInput = document.getElementById("ratingInput");
+
+// ⭐ Highlight on hover
+stars.forEach((star, index) => {
+
+    star.addEventListener("mouseover", function () {
+        highlightStars(index);
+    });
+
+    star.addEventListener("click", function () {
+        ratingInput.value = index + 1;
+    });
+
+});
+
+function highlightStars(index){
+    stars.forEach((s, i) => {
+        s.classList.toggle("selected", i <= index);
+    });
+}
+
+});
+</script>
 
 <script>
 
