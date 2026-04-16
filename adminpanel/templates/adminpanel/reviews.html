@@ -1,0 +1,201 @@
+{% extends "adminpanel/base.html" %}
+
+{% block content %}
+
+<div class="container">
+
+<h2 class="mb-4">⭐ Reviews Management</h2>
+
+<!-- 📊 STATS -->
+<div class="row mb-4">
+
+    <div class="col-md-6">
+        <div class="card p-3 text-center">
+            <h5>Total Reviews</h5>
+            <h3>{{ total_reviews }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card p-3 text-center">
+            <h5>Average Rating</h5>
+            <h3>⭐ {{ avg_rating|default:"0"|floatformat:1 }}</h3>
+        </div>
+    </div>
+
+</div>
+
+<!-- 🔍 SEARCH
+<form method="GET" class="mb-3">
+    <input type="text" name="search" value="{{ search }}"
+           class="form-control"
+           placeholder="Search user or service...">
+</form> -->
+
+<form method="GET" class="row g-2 mb-3">
+
+    <!-- CATEGORY -->
+    <div class="col-md-3">
+        <select name="category" class="form-select">
+            <option value="">All Categories</option>
+            {% for c in categories %}
+            <option value="{{ c.id }}"
+                {% if selected_category == c.id|stringformat:"s" %}selected{% endif %}>
+                {{ c.name }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- SUBCATEGORY -->
+    <div class="col-md-3">
+        <select name="subcategory" class="form-select">
+            <option value="">All Subcategories</option>
+            {% for s in subcategories %}
+            <option value="{{ s.id }}"
+                {% if selected_subcategory == s.id|stringformat:"s" %}selected{% endif %}>
+                {{ s.name }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- PROVIDER -->
+    <div class="col-md-3">
+        <select name="provider" class="form-select">
+            <option value="">All Providers</option>
+            {% for p in providers %}
+            <option value="{{ p.id }}"
+                {% if selected_provider == p.id|stringformat:"s" %}selected{% endif %}>
+                {{ p.business_name }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="col-md-3">
+        <input type="text" name="search" value="{{ search }}"
+               class="form-control" placeholder="Search...">
+    </div>
+
+    <!-- BUTTONS -->
+    <div class="col-md-12 text-end mt-2">
+        <button type="submit" class="btn btn-primary">Filter</button>
+        <a href="{% url 'admin_reviews' %}" class="btn btn-secondary">Reset</a>
+    </div>
+
+</form>
+
+
+<!-- 📋 TABLE -->
+<table class="table table-bordered table-hover">
+
+<thead>
+<tr>
+    <th>User</th>
+    <th>Service</th>
+    <th>Provider</th>
+    <th>Rating</th>
+    <th>Comment</th>
+    <th>Date</th>
+    <th>Action</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for review in page_obj %}
+<tr>
+
+<td>{{ review.user.username }}</td>
+<td>{{ review.service.title }}</td>
+<td>{{ review.service.provider.business_name }}</td>
+
+<!-- ⭐ COLOR RATING -->
+<td>
+    {% if review.rating <= 2 %}
+        <span class="badge bg-danger">⭐ {{ review.rating }}</span>
+    {% elif review.rating == 3 %}
+        <span class="badge bg-warning text-dark">⭐ {{ review.rating }}</span>
+    {% else %}
+        <span class="badge bg-success">⭐ {{ review.rating }}</span>
+    {% endif %}
+</td>
+
+<td>{{ review.comment|truncatewords:10 }}</td>
+<td>{{ review.created_at|date:"d M Y" }}</td>
+
+<!-- ❌ DELETE BUTTON -->
+<td>
+    <a href="{% url 'delete_review_admin' review.id %}"
+       class="btn btn-sm btn-danger"
+       onclick="return confirm('Are you sure you want to delete this review?')">
+       Delete
+    </a>
+</td>
+
+</tr>
+{% empty %}
+<tr>
+<td colspan="7" class="text-center text-muted">
+    📝 No reviews yet
+</td>
+</tr>
+{% endfor %}
+
+</tbody>
+
+</table>
+
+<!-- 📄 PAGINATION -->
+<nav>
+
+<ul class="pagination justify-content-center">
+
+{% if page_obj.has_previous %}
+<li class="page-item">
+    <a class="page-link"
+       href="?page={{ page_obj.previous_page_number }}
+       &category={{ selected_category }}
+       &subcategory={{ selected_subcategory }}
+       &provider={{ selected_provider }}
+       &search={{ search }}">
+       Previous
+    </a>
+</li>
+{% endif %}
+
+{% for num in page_obj.paginator.page_range %}
+<li class="page-item {% if page_obj.number == num %}active{% endif %}">
+    <a class="page-link"
+       href="?page={{ num }}
+       &category={{ selected_category }}
+       &subcategory={{ selected_subcategory }}
+       &provider={{ selected_provider }}
+       &search={{ search }}">
+       {{ num }}
+    </a>
+</li>
+{% endfor %}
+
+{% if page_obj.has_next %}
+<li class="page-item">
+    <a class="page-link"
+       href="?page={{ page_obj.next_page_number }}
+       &category={{ selected_category }}
+       &subcategory={{ selected_subcategory }}
+       &provider={{ selected_provider }}
+       &search={{ search }}">
+       Next
+    </a>
+</li>
+{% endif %}
+
+</ul>
+
+</nav>
+
+</div>
+
+{% endblock %}

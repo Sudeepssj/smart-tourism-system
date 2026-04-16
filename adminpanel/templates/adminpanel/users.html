@@ -1,0 +1,142 @@
+{% extends "adminpanel/base.html" %}
+
+{% block content %}
+
+<div class="container">
+
+<h2 class="mb-4">👤 Users Management</h2>
+
+<!-- 📊 SUMMARY -->
+<div class="row mb-4">
+
+    <div class="col-md-6">
+        <div class="card p-3 text-center">
+            <h5>Total Users</h5>
+            <h3>{{ total_users }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card p-3 text-center">
+            <h5>Total Providers</h5>
+            <h3>{{ total_providers }}</h3>
+        </div>
+    </div>
+
+</div>
+
+<!-- 🔍 SEARCH + FILTER -->
+<div class="d-flex justify-content-between mb-3">
+
+    <input type="text" id="searchInput" class="form-control w-50"
+           placeholder="🔍 Search name or email...">
+
+    <div>
+        <button class="btn btn-outline-primary" onclick="filterRole('all')">All</button>
+        <button class="btn btn-outline-success" onclick="filterRole('user')">Users</button>
+        <button class="btn btn-outline-warning" onclick="filterRole('provider')">Providers</button>
+    </div>
+
+</div>
+
+<!-- 📋 TABLE -->
+<table class="table table-bordered" id="userTable">
+
+<thead>
+<tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Role</th>
+    <th>Main Category</th>
+    <th>Subcategory</th>
+    <th>Status</th>
+    <th>Action</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for u in data %}
+<tr data-role="{{ u.role }}">
+
+<td>{{ u.name }}</td>
+<td>{{ u.email }}</td>
+
+<td>
+    {% if u.role == "provider" %}
+        <span class="badge bg-warning">Provider</span>
+    {% else %}
+        <span class="badge bg-primary">User</span>
+    {% endif %}
+</td>
+
+<td>{{ u.main_category }}</td>
+<td>{{ u.subcategory }}</td>
+
+<!-- ✅ STATUS -->
+<td>
+    {% if u.is_active %}
+        <span class="badge bg-success">Active</span>
+    {% else %}
+        <span class="badge bg-danger">Disabled</span>
+    {% endif %}
+</td>
+
+<!-- ✅ ACTION -->
+<td>
+    <a href="{% url 'toggle_user_status' u.id %}"
+       class="btn btn-sm {% if u.is_active %}btn-danger{% else %}btn-success{% endif %}"
+       onclick="return confirm('Are you sure?')">
+
+        {% if u.is_active %}
+            Disable
+        {% else %}
+            Enable
+        {% endif %}
+    </a>
+</td>
+
+</tr>
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+<!-- 🔍 SEARCH SCRIPT -->
+<script>
+document.getElementById("searchInput").addEventListener("keyup", function(){
+
+    let value = this.value.toLowerCase();
+
+    document.querySelectorAll("#userTable tbody tr").forEach(function(row){
+
+        let text = row.innerText.toLowerCase();
+
+        row.style.display = text.includes(value) ? "" : "none";
+
+    });
+
+});
+</script>
+
+<!-- 🔽 FILTER SCRIPT -->
+<script>
+function filterRole(role){
+
+    document.querySelectorAll("#userTable tbody tr").forEach(function(row){
+
+        if(role === "all"){
+            row.style.display = "";
+        } else {
+            row.style.display = row.dataset.role === role ? "" : "none";
+        }
+
+    });
+
+}
+</script>
+
+{% endblock %}

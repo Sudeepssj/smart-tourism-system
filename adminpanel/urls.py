@@ -26,5 +26,9 @@ urlpatterns = [
     path("categories/sub/edit/<int:id>/", views.edit_sub_category, name="edit_sub_category"),
     path("categories/sub/delete/<int:id>/", views.delete_sub_category, name="delete_sub_category"),
     
+    path("users/", views.admin_users, name="admin_users"),
+    path("users/toggle/<int:user_id>/", views.toggle_user_status, name="toggle_user_status"),
+    path("reviews/", views.admin_reviews, name="admin_reviews"),
+    path("reviews/delete/<int:review_id>/", views.delete_review_admin, name="delete_review_admin"),
 
 ]

@@ -287,3 +287,180 @@ def delete_sub_category(request, id):
 
     messages.success(request, "Sub Category deleted successfully.")
     return redirect("admin_sub_categories")
+
+
+
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from accounts.models import UserProfile
+from providers.models import ProviderProfile
+
+
+@login_required
+def admin_users(request):
+
+    users = User.objects.all().select_related()
+
+    data = []
+
+    total_users = 0
+    total_providers = 0
+
+    for user in users:
+
+        profile = UserProfile.objects.filter(user=user).first()
+
+        role = profile.role if profile else "user"
+
+        if role == "provider":
+            total_providers += 1
+        else:
+            total_users += 1
+
+        provider = ProviderProfile.objects.filter(user=user).first()
+
+        main_category = "-"
+        subcategory = "-"
+
+        if provider:
+            if provider.subcategory:
+                subcategory = provider.subcategory.name
+                main_category = provider.subcategory.main_category.name
+
+        data.append({
+            "id": user.id,
+            "name": user.username,
+            "email": user.email,
+            "role": role,
+            "main_category": main_category,
+            "subcategory": subcategory,
+            "is_active": user.is_active,
+        })
+                
+
+    context = {
+        "data": data,
+        "total_users": total_users,
+        "total_providers": total_providers,
+    }
+
+    return render(request, "adminpanel/users.html", context)
+
+
+
+from django.shortcuts import redirect, get_object_or_404
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+
+
+@login_required
+def toggle_user_status(request, user_id):
+
+    user = get_object_or_404(User, id=user_id)
+
+    # Prevent admin disabling themselves
+    if user == request.user:
+        messages.error(request, "You cannot disable your own account.")
+        return redirect("admin_users")
+
+    # Toggle status
+    if user.is_active:
+        user.is_active = False
+        messages.success(request, f"{user.username} has been disabled.")
+    else:
+        user.is_active = True
+        messages.success(request, f"{user.username} has been enabled.")
+
+    user.save()
+
+    return redirect("admin_users")
+
+
+from django.shortcuts import render
+from django.core.paginator import Paginator
+from django.db.models import Avg
+from reviews.models import Review
+from categories.models import MainCategory, SubCategory
+from providers.models import ProviderProfile
+
+
+def admin_reviews(request):
+
+    reviews = Review.objects.select_related(
+        "user", "service", "service__provider", "service__subcategory"
+    ).order_by("-created_at")
+
+    # 🔽 FILTER VALUES FROM URL
+    category_id = request.GET.get("category")
+    subcategory_id = request.GET.get("subcategory")
+    provider_id = request.GET.get("provider")
+    search = request.GET.get("search")
+
+    # 🔍 APPLY FILTERS
+
+    if category_id:
+        reviews = reviews.filter(
+            service__subcategory__main_category_id=category_id
+        )
+
+    if subcategory_id:
+        reviews = reviews.filter(
+            service__subcategory_id=subcategory_id
+        )
+
+    if provider_id:
+        reviews = reviews.filter(
+            service__provider_id=provider_id
+        )
+
+    if search:
+        reviews = reviews.filter(
+            user__username__icontains=search
+        ) | reviews.filter(
+            service__title__icontains=search
+        )
+
+    # 📊 STATS
+    total_reviews = reviews.count()
+    avg_rating = reviews.aggregate(Avg("rating"))["rating__avg"]
+
+    # 📄 PAGINATION
+    paginator = Paginator(reviews, 10)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    # 🔽 DROPDOWN DATA
+    categories = MainCategory.objects.all()
+    subcategories = SubCategory.objects.all()
+    providers = ProviderProfile.objects.all()
+
+    context = {
+        "page_obj": page_obj,
+        "total_reviews": total_reviews,
+        "avg_rating": avg_rating,
+        "categories": categories,
+        "subcategories": subcategories,
+        "providers": providers,
+        "selected_category": category_id,
+        "selected_subcategory": subcategory_id,
+        "selected_provider": provider_id,
+        "search": search,
+    }
+
+    return render(request, "adminpanel/reviews.html", context)
+
+from django.shortcuts import redirect, get_object_or_404
+from django.contrib import messages
+from reviews.models import Review
+
+def delete_review_admin(request, review_id):
+
+    review = get_object_or_404(Review, id=review_id)
+
+    review.delete()
+
+    messages.success(request, "Review deleted successfully")
+
+    return redirect("admin_reviews")

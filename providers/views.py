@@ -294,3 +294,31 @@ def booking_status_update(request, booking_id, status):
     messages.success(request, "Booking updated successfully")
 
     return redirect("provider_bookings")
+
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from reviews.models import Review
+from services.models import Service
+from django.db.models import Avg
+
+@login_required
+def provider_reviews(request):
+
+    # Get provider services
+    services = Service.objects.filter(provider__user=request.user)
+
+    # Get reviews for those services
+    reviews = Review.objects.filter(service__in=services).select_related("user", "service")
+
+    # Stats
+    total_reviews = reviews.count()
+    avg_rating = reviews.aggregate(Avg("rating"))["rating__avg"]
+
+    context = {
+        "reviews": reviews,
+        "total_reviews": total_reviews,
+        "avg_rating": avg_rating,
+    }
+
+    return render(request, "providers/reviews.html", context)

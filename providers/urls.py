@@ -16,7 +16,7 @@ urlpatterns = [
     path("services/image/delete/<int:pk>/", views.service_image_delete, name="service_image_delete"),
     path("bookings/",views.provider_bookings,name="provider_bookings"),
     path("bookings/update/<str:booking_id>/<str:status>/",views.booking_status_update,name="booking_status_update"),
-
+    path("reviews/", views.provider_reviews, name="provider_reviews"),
 
 
 ]
