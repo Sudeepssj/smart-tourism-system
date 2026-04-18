@@ -8,6 +8,21 @@ from categories.models import SubCategory
 # ----------------------------
 class Service(models.Model):
 
+    # 🔥 NEW FIELD (ADD THIS ABOVE provider OR BELOW — ANYWHERE INSIDE MODEL)
+    BOOKING_TYPE_CHOICES = [
+        ("stay", "Stay (Hotel/Resort)"),
+        ("timeslot", "Time Slot (Cafe/Food)"),
+        ("ride", "Ride (Transport)"),
+        ("event", "Event (Tours/Activities)"),
+    ]
+
+    booking_type = models.CharField(
+        max_length=20,
+        choices=BOOKING_TYPE_CHOICES,
+        default="event"
+    )
+
+    # EXISTING FIELDS (NO CHANGE)
     provider = models.ForeignKey(
         ProviderProfile,
         on_delete=models.CASCADE,

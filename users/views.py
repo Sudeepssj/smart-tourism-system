@@ -122,10 +122,22 @@ from django.shortcuts import render, get_object_or_404
 
 
 
+from datetime import date
+from django.db.models import Avg
+from django.shortcuts import render, get_object_or_404
 
 def service_details(request, service_id):
 
     service = get_object_or_404(Service, id=service_id)
+
+    # 🔥 AUTO UPDATE → COMPLETED (VERY IMPORTANT)
+    if request.user.is_authenticated:
+        Booking.objects.filter(
+            user=request.user,
+            service=service,
+            check_out__lt=date.today(),
+            status="confirmed"
+        ).update(status="completed")
 
     reviews = Review.objects.filter(service=service)
 
@@ -133,7 +145,7 @@ def service_details(request, service_id):
 
     has_booked = False
     user_reviewed = False
-    user_review = None   # ⭐ NEW
+    user_review = None
 
     if request.user.is_authenticated:
 
@@ -144,7 +156,7 @@ def service_details(request, service_id):
             status="completed"
         ).exists()
 
-        # ⭐ Get user's review (only once)
+        # ⭐ Get user's review
         user_review = Review.objects.filter(
             user=request.user,
             service=service
@@ -162,11 +174,10 @@ def service_details(request, service_id):
         "avg_rating": avg_rating,
         "has_booked": has_booked,
         "user_reviewed": user_reviewed,
-        "user_review": user_review,   # ⭐ IMPORTANT
+        "user_review": user_review,
     }
 
     return render(request, "users/service_details.html", context)
-
 @login_required
 def my_bookings(request):
 

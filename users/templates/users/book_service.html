@@ -6,53 +6,99 @@
 
 <h3 class="mb-4">Book {{ service.title }}</h3>
 
-<div class="card shadow-sm p-4">
-
 <form method="POST">
-
 {% csrf_token %}
 
-<div class="mb-3">
-<label>Check In</label>
-<input type="date" name="check_in" class="form-control" name="{{ today }}">
+<!-- 🔥 DYNAMIC BOOKING FIELDS -->
+
+{% if booking_type == "stay" %}
+
+<div class="row">
+    <div class="col-md-6">
+        <label>Check In</label>
+        <input type="date" name="check_in"
+               class="form-control mb-2"
+               min="{{ today|date:'Y-m-d' }}" required>
+    </div>
+
+    <div class="col-md-6">
+        <label>Check Out</label>
+        <input type="date" name="check_out"
+               class="form-control mb-2"
+               min="{{ today|date:'Y-m-d' }}" required>
+    </div>
 </div>
 
-<div class="mb-3">
-<label>Check Out</label>
-<input type="date" name="check_out" class="form-control">
+{% elif booking_type == "timeslot" %}
+
+<div class="row">
+    <div class="col-md-6">
+        <label>Date</label>
+        <input type="date" name="date"
+               class="form-control mb-2"
+               min="{{ today|date:'Y-m-d' }}" required>
+    </div>
+
+    <div class="col-md-6">
+        <label>Time</label>
+        <input type="time" name="time"
+               class="form-control mb-2" required>
+    </div>
 </div>
 
-<div class="mb-3">
-<label>Guests / Quantity</label>
-<input type="number" name="quantity" value="1" class="form-control">
+{% elif booking_type == "ride" %}
+
+<div class="row">
+    <div class="col-md-6">
+        <label>Pickup Date</label>
+        <input type="date" name="pickup_date"
+               class="form-control mb-2"
+               min="{{ today|date:'Y-m-d' }}" required>
+    </div>
+
+    <div class="col-md-6">
+        <label>Pickup Time</label>
+        <input type="time" name="pickup_time"
+               class="form-control mb-2">
+    </div>
 </div>
 
-<div class="mb-3">
+<label>Pickup Location</label>
+<input type="text" name="pickup_location" class="form-control mb-2">
+
+<label>Drop Location</label>
+<input type="text" name="drop_location" class="form-control mb-2">
+
+{% else %}
+
+<label>Date</label>
+<input type="date" name="date"
+       class="form-control mb-2"
+       min="{{ today|date:'Y-m-d' }}" required>
+
+{% endif %}
+
+<!-- 🔹 COMMON FIELDS -->
+
+<label>Quantity</label>
+<input type="number" name="quantity"
+       class="form-control mb-2"
+       min="1" value="1">
+
 <label>Phone</label>
-<input type="text" name="phone" class="form-control">
-</div>
+<input type="text" name="phone"
+       class="form-control mb-2" required>
 
-<div class="mb-3">
 <label>Special Request</label>
-<textarea name="special_request" class="form-control"></textarea>
-</div>
+<textarea name="special_request"
+          class="form-control mb-3"></textarea>
 
-<button class="btn btn-success w-100">
-Confirm Booking
+<button class="btn btn-primary w-100">
+    Confirm Booking
 </button>
 
 </form>
 
 </div>
-
-</div>
-<script>
-document.querySelector("input[name='check_in']").addEventListener("change", function(){
-
-    let checkin = this.value;
-    document.querySelector("input[name='check_out']").min = checkin;
-
-});
-</script>
 
 {% endblock %}
