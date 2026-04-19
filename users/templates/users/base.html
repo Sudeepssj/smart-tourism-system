@@ -59,6 +59,23 @@ html {
 #explore-section {
     margin-top: 50px;
 }
+
+
+.dropdown-item:hover {
+    background-color: #f5f5f5;
+    transform: translateX(3px);
+    transition: 0.2s;
+}
+
+.navbar {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.dropdown-header {
+    font-weight: 600;
+    color: #555;
+    padding-left: 10px;
+}
 </style>
 
 </head>
@@ -100,12 +117,60 @@ My Bookings
 </a>
 </li>
 
-<li class="nav-item">
-<a class="nav-link" href="#">Profile</a>
+<!-- <li class="nav-item">
+<a class="nav-link" href="{% url 'user_profile' %}">Profile</a>
 </li>
 
 <li class="nav-item">
 <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+</li> -->
+
+<li class="nav-item dropdown">
+
+<a class="nav-link dropdown-toggle d-flex align-items-center gap-2"
+   href="#"
+   role="button"
+   data-bs-toggle="dropdown"
+   style="font-weight:500;">
+
+    {% if request.user.userprofile.profile_image %}
+        <img src="{{ request.user.userprofile.profile_image.url }}"
+             class="rounded-circle border"
+             style="width:36px;height:36px;object-fit:cover;">
+    {% else %}
+        <img src="https://ui-avatars.com/api/?name={{ request.user.username }}"
+             class="rounded-circle border"
+             style="width:36px;height:36px;">
+    {% endif %}
+
+    <span>{{ request.user.username }}</span>
+
+</a>
+
+<ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 p-2"
+    style="min-width:200px; border-radius:10px;">
+    <li class="dropdown-header">
+    Hi, {{ request.user.username }}
+    </li>
+    <li><hr class="dropdown-divider"></li>
+    <li>
+        <a class="dropdown-item rounded px-3 py-2"
+           href="{% url 'user_profile' %}">
+            👤 Profile
+        </a>
+    </li>
+
+    <li><hr class="dropdown-divider"></li>
+
+    <li>
+        <a class="dropdown-item text-danger rounded px-3 py-2"
+           href="{% url 'logout' %}">
+            🚪 Logout
+        </a>
+    </li>
+
+</ul>
+
 </li>
 
 </ul>
@@ -151,10 +216,10 @@ My Bookings
 
 <ul class="list-unstyled">
 
-<li><a href="#">Home</a></li>
+<li><a href="{% url 'user_dashboard' %}">Home</a></li>
 <li><a href="#explore-section">Explore</a></li>
-<li><a href="#">My Bookings</a></li>
-<li><a href="#">Profile</a></li>
+<li><a href="{% url 'my_bookings' %}">My Bookings</a></li>
+<li><a href="{% url 'user_profile' %}">Profile</a></li>
 
 </ul>
 

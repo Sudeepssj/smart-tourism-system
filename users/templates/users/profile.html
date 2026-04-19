@@ -1,0 +1,81 @@
+{% extends "users/base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+<h3 class="mb-4">My Profile</h3>
+
+<form method="POST" enctype="multipart/form-data">
+{% csrf_token %}
+
+<div class="row">
+
+<!-- LEFT SIDE (IMAGE) -->
+<div class="col-md-4 text-center">
+
+    {% if profile.profile_image %}
+        <img src="{{ profile.profile_image.url }}" 
+             class="img-fluid rounded-circle mb-3"
+             style="width:150px;height:150px;object-fit:cover;">
+    {% else %}
+        <img src="https://via.placeholder.com/150"
+             class="rounded-circle mb-3">
+    {% endif %}
+
+    <input type="file" name="profile_image" class="form-control">
+
+</div>
+
+<!-- RIGHT SIDE (FORM) -->
+<div class="col-md-8">
+
+<label>Name</label>
+<input type="text" name="name"
+       value="{{ request.user.username }}"
+       class="form-control mb-2">
+
+<label>Email</label>
+<input type="email" name="email"
+       value="{{ request.user.email }}"
+       class="form-control mb-2">
+
+<label>Phone</label>
+<input type="text" name="phone"
+       value="{{ profile.phone }}"
+       class="form-control mb-2">
+
+<label>District</label>
+<select name="district" class="form-control mb-2">
+    <option value="">Select District</option>
+    {% for d in districts %}
+        <option value="{{ d.id }}"
+        {% if profile.district and profile.district.id == d.id %}
+            selected
+        {% endif %}
+        >
+            {{ d.name }}
+        </option>
+    {% endfor %}
+</select>
+
+<label>Address</label>
+<textarea name="address" class="form-control mb-3">
+{{ profile.address }}
+</textarea>
+
+<button class="btn btn-primary">
+    Update Profile
+</button>
+
+
+
+</div>
+
+</div>
+
+</form>
+
+</div>
+
+{% endblock %}

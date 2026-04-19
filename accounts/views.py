@@ -4,10 +4,21 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
-
+from django.contrib.auth import update_session_auth_hash
 from .models import UserProfile
 from locations.models import District
 from providers.models import ProviderProfile
+from categories.models import MainCategory, SubCategory
+
+
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+from django.contrib.auth.models import User
+
+from .models import UserProfile
+from providers.models import ProviderProfile
+from locations.models import District
 from categories.models import MainCategory, SubCategory
 
 
@@ -28,10 +39,9 @@ def auth_page(request):
             user = authenticate(request, username=username, password=password)
 
             if user:
-
                 login(request, user)
 
-                # Admin
+                # ✅ SUPER ADMIN
                 if user.is_superuser:
                     return redirect("admin_dashboard")
 
@@ -42,7 +52,7 @@ def auth_page(request):
                     logout(request)
                     return redirect("auth_page")
 
-                # PROVIDER LOGIN
+                # ✅ PROVIDER LOGIN
                 if profile.role == "provider":
 
                     provider = ProviderProfile.objects.filter(user=user).first()
@@ -51,20 +61,17 @@ def auth_page(request):
                         logout(request)
                         return redirect("auth_page")
 
+                    # approval check
                     if provider.status in ["pending", "rejected"]:
                         return redirect("provider_waiting")
 
-                    # Check if profile completed
-                    if not provider.business_description or not provider.full_address or not provider.logo:
+                    # profile completion check
+                    if not provider.business_description or not provider.logo:
                         return redirect("provider_complete_profile")
 
                     return redirect("provider_dashboard")
 
-                # ADMIN ROLE
-                if profile.role == "admin":
-                    return redirect("admin_dashboard")
-
-                # NORMAL USER
+                # ✅ NORMAL USER
                 return redirect("user_dashboard")
 
             else:
@@ -72,6 +79,29 @@ def auth_page(request):
                 return redirect("auth_page")
 
         # ================= USER SIGNUP =================
+        elif form_type == "user_signup":
+
+            username = request.POST.get("username")
+            email = request.POST.get("email")
+            password = request.POST.get("password")
+
+            if User.objects.filter(username=username).exists():
+                messages.error(request, "Username already exists")
+                return redirect("auth_page")
+
+            user = User.objects.create_user(
+                username=username,
+                email=email,
+                password=password
+            )
+
+            # ✅ ROLE = USER
+            UserProfile.objects.create(user=user, role="user")
+
+            messages.success(request, "Account created successfully! Please login.")
+            return redirect("auth_page")
+
+        # ================= PROVIDER SIGNUP =================
         elif form_type == "provider_signup":
 
             username = request.POST.get("username")
@@ -80,11 +110,9 @@ def auth_page(request):
 
             business_name = request.POST.get("business_name")
             phone = request.POST.get("phone")
-
             subcategory_id = request.POST.get("subcategory")
             district_id = request.POST.get("district")
 
-            # check username
             if User.objects.filter(username=username).exists():
                 messages.error(request, "Username already exists")
                 return redirect("auth_page")
@@ -96,10 +124,12 @@ def auth_page(request):
                 password=password
             )
 
-            # create role profile
-            UserProfile.objects.create(user=user, role="provider")
+            # ✅ SAFE PROFILE CREATION
+            profile, created = UserProfile.objects.get_or_create(user=user)
+            profile.role = "provider"
+            profile.save()
 
-            # get related objects
+            # related objects
             district = District.objects.get(id=district_id)
             subcategory = SubCategory.objects.get(id=subcategory_id)
 
@@ -110,18 +140,17 @@ def auth_page(request):
                 phone=phone,
                 district=district,
                 subcategory=subcategory,
-                full_address="Temporary address",   # required field
+                full_address="Temporary address",
                 status="pending"
             )
 
-            messages.success(request, "Provider registered successfully. Wait for admin approval.")
+            messages.success(request, "Provider registered! Wait for admin approval.")
             return redirect("auth_page")
 
     return render(request, "accounts/auth.html", {
         "districts": districts,
         "main_categories": main_categories
     })
-
 
 def logout_view(request):
     logout(request)
@@ -155,3 +184,45 @@ def get_subcategories(request):
     ).values("id", "name")
 
     return JsonResponse(list(subcategories), safe=False)
+
+
+
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .models import UserProfile
+from locations.models import District
+
+
+@login_required
+def user_profile(request):
+
+    profile, created = UserProfile.objects.get_or_create(user=request.user)
+
+    districts = District.objects.all()
+
+    if request.method == "POST":
+
+        # Update User model
+        request.user.username = request.POST.get("name")
+        request.user.email = request.POST.get("email")
+        request.user.save()
+
+        # Update Profile
+        profile.phone = request.POST.get("phone")
+        profile.address = request.POST.get("address")
+
+        district_id = request.POST.get("district")
+        if district_id:
+            profile.district_id = district_id
+
+        if request.FILES.get("profile_image"):
+            profile.profile_image = request.FILES.get("profile_image")
+
+        profile.save()
+
+        return redirect("user_profile")
+
+    return render(request, "users/profile.html", {
+        "profile": profile,
+        "districts": districts
+    })
