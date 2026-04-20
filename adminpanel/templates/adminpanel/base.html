@@ -38,7 +38,12 @@
                 </a>
             </li>
 
-            <li><a href="{% url 'admin_users' %}"><i class="fas fa-users"></i> Users</a></li>
+            <li>
+                <a href="{% url 'admin_users' %}"
+                class="{% if request.resolver_match.url_name == 'admin_users' %}active{% endif %}">
+                    <i class="fas fa-users"></i> Users
+                </a>
+            </li>
             <li class="sidebar-item">
                 <a class="sidebar-link d-flex justify-content-between align-items-center"
                 data-bs-toggle="collapse"
@@ -53,8 +58,8 @@
                     <ul class="list-unstyled ps-4 mt-2">
 
                         <li>
-                            <a href="{% url 'pending_providers' %}"
-                                class="sidebar-sublink">
+                            <a href="{% url 'pending_providers' %}" class="sidebar-sublink {% if request.resolver_match.url_name == 'pending_providers' %}active{% endif %}" 
+                                >
                                 ⏳ Pending Providers 
                                 <span class="badge bg-danger ms-2" id="sidebarPendingCount">
                                     {{ pending_count|default:0 }}
@@ -63,18 +68,18 @@
                         </li>
 
                         <li>
-                            <a href="{% url 'approved_providers' %}"
-                            class="sidebar-sublink">
+                            <a href="{% url 'approved_providers' %}" class="sidebar-sublink {% if request.resolver_match.url_name == 'approved_providers' %}active{% endif %}" 
+                            >
                             ✅ Approved Providers
                             </a>
                         </li>
                         <li>
-                            <a href="{% url 'rejected_providers' %}"
-                            class="sidebar-sublink">
+                            <a href="{% url 'rejected_providers' %}" class="sidebar-sublink {% if request.resolver_match.url_name == 'rejected_providers' %}active{% endif %}" 
+                            >
                             ❌ Rejected Providers
                             </a>
                         </li>
-
+                        
                     </ul>
                 </div>
             </li>
@@ -99,13 +104,13 @@
                     <ul class="list-unstyled ps-4 mt-2">
 
                         <li>
-                            <a href="{% url 'admin_main_categories' %}" class="sidebar-sublink">
+                            <a href="{% url 'admin_main_categories' %}" class="sidebar-sublink {% if request.resolver_match.url_name == 'admin_main_categories' %}active{% endif %}">
                                 📁 Main Categories
                             </a>
                         </li>
-
+                            
                         <li>
-                            <a href="{% url 'admin_sub_categories' %}" class="sidebar-sublink">
+                            <a href="{% url 'admin_sub_categories' %}" class="sidebar-sublink {% if request.resolver_match.url_name == 'admin_sub_categories' %}active{% endif %}">
                                 📂 Sub Categories
                             </a>
                         </li>
@@ -116,16 +121,14 @@
 
                 </li>
             <li class="sidebar-item">
-                <a class="sidebar-link d-flex justify-content-between align-items-center"
-                data-bs-toggle="collapse"
-                href="#districtMenu"
-                role="button"
-                aria-expanded="false"
-                aria-controls="districtMenu">
+                <a class="sidebar-link d-flex justify-content-between align-items-center 
+{% if request.resolver_match.url_name == 'add_district' or request.resolver_match.url_name == 'district_list' %}active{% endif %}"
+data-bs-toggle="collapse"
+href="#districtMenu">
                     <span><i class="fas fa-map-marker-alt me-2"></i> Districts</span>
                     <i class="fas fa-chevron-down small"></i>
                 </a>
-                <div class="collapse {% if 'districts' in request.path %}show{% endif %}" id="districtMenu">
+                <div class="collapse {% if request.resolver_match.url_name == 'add_district' or request.resolver_match.url_name == 'district_list' %}show{% endif %}" id="districtMenu">
 
                     <ul class="list-unstyled ps-4 mt-2">
                         <li>
@@ -136,14 +139,20 @@
 
                         </li>
                         <li>
-                            <a href="{% url 'district_list' %}" class="sidebar-sublink">
-                                📋 Manage District
+                            <a href="{% url 'district_list' %}" 
+                                class="sidebar-sublink {% if request.resolver_match.url_name == 'district_list' %}active{% endif %}">
+                                    📋 Manage District
                             </a>
                         </li>
                     </ul>
                 </div>
             </li>
-            <li><a href="{% url 'admin_reviews' %}"><i class="fas fa-star"></i> Reviews</a></li>
+            <li>
+                <a href="{% url 'admin_reviews' %}"
+                class="{% if request.resolver_match.url_name == 'admin_reviews' %}active{% endif %}">
+                    <i class="fas fa-star"></i> Reviews
+                </a>
+            </li>
             <li><a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </nav>

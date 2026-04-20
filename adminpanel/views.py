@@ -155,6 +155,7 @@ def update_provider_status(request):
 
     return JsonResponse({"success": True})
 
+
 @login_required
 @admin_required
 def rejected_providers(request):
