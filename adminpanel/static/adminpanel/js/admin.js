@@ -4,19 +4,24 @@ document.addEventListener("DOMContentLoaded", function () {
     const toggleBtn = document.getElementById("sidebarToggle");
     const overlay = document.getElementById("sidebar-overlay");
 
-    if (toggleBtn) {
-        toggleBtn.addEventListener("click", function () {
+    toggleBtn.addEventListener("click", function () {
+
+        // MOBILE
+        if (window.innerWidth < 992) {
             sidebar.classList.toggle("active");
             overlay.classList.toggle("active");
-        });
-    }
+        } 
+        // DESKTOP
+        else {
+            sidebar.classList.toggle("collapsed");
+        }
+    });
 
-    if (overlay) {
-        overlay.addEventListener("click", function () {
-            sidebar.classList.remove("active");
-            overlay.classList.remove("active");
-        });
-    }
+    // Overlay click (only mobile)
+    overlay.addEventListener("click", function () {
+        sidebar.classList.remove("active");
+        overlay.classList.remove("active");
+    });
 
 });
 
@@ -30,6 +35,12 @@ document.getElementById("searchInput")?.addEventListener("keyup", function () {
     });
 });
 
+// sidebar
+
+
+document.getElementById("sidebar-overlay").addEventListener("click", function() {
+    document.getElementById("sidebar").classList.remove("active");
+});
 
 // Open Edit Modal
 document.addEventListener("click", function (e) {

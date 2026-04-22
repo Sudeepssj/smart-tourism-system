@@ -2,28 +2,7 @@
 
 {% block content %}
 
-<style>
-    /* .dashboard-card {
-    padding: 20px;
-    border-radius: 14px;
-    color: rgb(203, 106, 106);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    transition: 0.3s;
-}
 
-.dashboard-card:hover {
-    transform: translateY(-6px);
-}
-
-.dashboard-card h6 {
-    font-size: 14px;
-    opacity: 0.9;
-}
-
-.dashboard-card h2 {
-    font-weight: bold;
-} */
-</style>
 
 <div class="container-fluid">
 
@@ -66,43 +45,3 @@
 
 
 {% endblock %}
-
-
-
-<!-- 
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-
-    function updateStatus(providerId, action) {
-
-        fetch("{% url 'update_provider_status' %}", {
-            method: "POST",
-            headers: {
-                "X-CSRFToken": "{{ csrf_token }}",
-                "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: `provider_id=${providerId}&action=${action}`
-        })
-        .then(response => response.json())
-        .then(data => {
-            if(data.success) {
-                document.getElementById("row-" + providerId).remove();
-                document.getElementById("pendingCount").innerText = data.pending_count;
-            }
-        });
-    }
-
-    document.querySelectorAll(".approveBtn").forEach(btn => {
-        btn.addEventListener("click", function() {
-            updateStatus(this.dataset.id, "approve");
-        });
-    });
-
-    document.querySelectorAll(".rejectBtn").forEach(btn => {
-        btn.addEventListener("click", function() {
-            updateStatus(this.dataset.id, "reject");
-        });
-    });
-
-});
-</script> -->
