@@ -108,6 +108,28 @@
 
         <!-- Page Content -->
         <div class="provider-content">{% block content %}{% endblock %}</div>
+
+        <!-- FOOTER -->
+        <footer class="provider-footer">
+
+            <div class="footer-left">
+                🌍 <span>Smart Tourism</span>
+                <small>Provider Panel</small>
+            </div>
+
+            <div class="footer-center">
+                © 2026 Smart Tourism
+            </div>
+
+            <div class="footer-right">
+                <a href="{% url 'provider_dashboard' %}">Dashboard</a>
+                <a href="{% url 'provider_my_business' %}">Business</a>
+                <a href="{% url 'service_list' %}">Services</a>
+                <a href="{% url 'provider_bookings' %}">Bookings</a>
+                <a href="{% url 'provider_reviews' %}">Reviews</a>
+            </div>
+
+        </footer>
       </div>
     </div>
 
