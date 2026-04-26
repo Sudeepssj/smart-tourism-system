@@ -9,6 +9,7 @@ from services.models import Service
 
 
 
+
 @login_required
 def user_dashboard(request):
 
@@ -59,30 +60,6 @@ def explore_category(request, category_id):
     }
 
     return render(request, "users/explore_category.html", context)
-
-
-
-
-
-
-from services.models import Service
-from categories.models import SubCategory
-
-
-# def services_by_subcategory(request, subcategory_id):
-
-#     subcategory = SubCategory.objects.get(id=subcategory_id)
-
-#     services = Service.objects.filter(
-#         subcategory=subcategory,
-#         is_available=True
-#     ).select_related("provider")
-
-#     return render(request, "users/services_list.html", {
-#         "subcategory": subcategory,
-#         "services": services
-#     })
-
 
 def services_by_subcategory(request, subcategory_id):
 
