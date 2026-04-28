@@ -32,9 +32,11 @@
            placeholder="🔍 Search name or email...">
 
     <div>
-        <button class="btn btn-outline-primary" onclick="filterRole('all')">All</button>
-        <button class="btn btn-outline-success" onclick="filterRole('user')">Users</button>
-        <button class="btn btn-outline-warning" onclick="filterRole('provider')">Providers</button>
+        <button class="btn btn-outline-primary active" onclick="filterRole('all', event)">All</button>
+        <button class="btn btn-outline-danger" onclick="filterRole('admin', event)">Admin</button>
+        <button class="btn btn-outline-success" onclick="filterRole('user', event)">Users</button>
+        <button class="btn btn-outline-warning" onclick="filterRole('provider', event)">Providers</button>
+        
     </div>
 
 </div>
@@ -63,8 +65,12 @@
 <td>{{ u.email }}</td>
 
 <td>
-    {% if u.role == "provider" %}
+    {% if u.role == "admin" %}
+        <span class="badge bg-danger">Admin</span>
+
+    {% elif u.role == "provider" %}
         <span class="badge bg-warning">Provider</span>
+
     {% else %}
         <span class="badge bg-primary">User</span>
     {% endif %}
@@ -105,33 +111,40 @@
 
 </div>
 
-<!-- 🔍 SEARCH SCRIPT -->
 <script>
-document.getElementById("searchInput").addEventListener("keyup", function(){
+let currentFilter = "all";
 
-    let value = this.value.toLowerCase();
+function filterRole(role, event) {
+
+    // 🔥 ONLY affect filter buttons (not all .btn)
+    document.querySelectorAll("#filterButtons .btn").forEach(btn => {
+        btn.classList.remove("active");
+    });
+
+    event.target.classList.add("active");
+
+    currentFilter = role;
+    applyFilters();
+}
+
+document.getElementById("searchInput").addEventListener("keyup", applyFilters);
+
+function applyFilters() {
+
+    let searchValue = document.getElementById("searchInput").value.toLowerCase();
 
     document.querySelectorAll("#userTable tbody tr").forEach(function(row){
 
         let text = row.innerText.toLowerCase();
+        let role = row.dataset.role;
 
-        row.style.display = text.includes(value) ? "" : "none";
+        let matchesSearch = text.includes(searchValue);
+        let matchesRole = (currentFilter === "all" || role === currentFilter);
 
-    });
-
-});
-</script>
-
-<!-- 🔽 FILTER SCRIPT -->
-<script>
-function filterRole(role){
-
-    document.querySelectorAll("#userTable tbody tr").forEach(function(row){
-
-        if(role === "all"){
+        if(matchesSearch && matchesRole){
             row.style.display = "";
         } else {
-            row.style.display = row.dataset.role === role ? "" : "none";
+            row.style.display = "none";
         }
 
     });
