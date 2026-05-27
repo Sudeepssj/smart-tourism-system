@@ -4,12 +4,17 @@ body {
     font-family: 'Segoe UI', sans-serif;
     background-color: #f4f6f9;
 }
+body,
+html {
+    height: 100%;
+}
 
 /* ===== Layout Wrapper ===== */
 .provider-wrapper {
     display: flex;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
+    
+    
 }
 
 /* ===== Sidebar ===== */
@@ -74,6 +79,7 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
+    
     background: #f4f6f9;
 }
 
@@ -92,7 +98,9 @@ body {
 .provider-content {
     flex: 1;
     padding: 30px;
-    overflow-y: auto;
+}
+.provider-footer {
+    margin-top: auto;
 }
 
 /* ===== Dashboard Cards ===== */
@@ -205,14 +213,7 @@ object-fit: cover;
 .footer-right a:hover {
     color: #3b82f6;
 }
-.provider-main {
-    display: flex;
-    flex-direction: column;
-}
 
-.provider-content {
-    flex: 1;
-}
 @media (max-width: 768px) {
     .provider-footer {
         flex-direction: column;
