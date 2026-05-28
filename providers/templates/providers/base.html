@@ -31,10 +31,11 @@
 
         <ul class="sidebar-menu">
           <li>
-            <a href="{% url 'provider_dashboard' %}">
+            <a href="{% url 'provider_dashboard' %}" class="{% if request.resolver_match.url_name == 'provider_dashboard' %}active-sidebar{% endif %}">
               <i class="fas fa-chart-line"></i>
               <span>Dashboard</span>
             </a>
+            
           </li>
 
           <!-- <li>
@@ -44,7 +45,7 @@
             </a>
           </li> -->
           <li>
-            <a href="{% url 'provider_my_business' %}">
+            <a href="{% url 'provider_my_business' %}" class="{% if request.resolver_match.url_name == 'provider_my_business' %}active-sidebar{% endif %}">
               <i class="fas fa-building"></i>  
               <span>My Business</span>
             </a>
@@ -57,7 +58,7 @@
             </a>
           </li> -->
           <li>
-          <a href="{% url 'service_list' %}" class="sidebar-link">
+          <a href="{% url 'service_list' %}" class="sidebar-link {% if request.resolver_match.url_name == 'service_list' %}active-sidebar{% endif %}  ">
               <i class="fa fa-box"></i> 
               <span>Services</span>
           </a>
@@ -66,14 +67,14 @@
           
 
           <li>
-            <a href="{% url 'provider_reviews' %}">
+            <a href="{% url 'provider_reviews' %}" class="{% if request.resolver_match.url_name == 'provider_reviews' %}active-sidebar{% endif %}">
               <i class="fas fa-star"></i>
               <span>Reviews</span>
             </a>
           </li>
 
           <li>
-            <a href="{% url 'provider_bookings' %}">
+            <a href="{% url 'provider_bookings' %}" class="{% if request.resolver_match.url_name == 'provider_bookings' %}active-sidebar{% endif %}">
               <i class="fas fa-calendar-check"></i>
               <span>Bookings</span>
             </a>

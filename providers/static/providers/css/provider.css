@@ -25,7 +25,7 @@ html {
     display: flex;
     flex-direction: column;
     padding-top: 20px;
-    transition: all 0.3s ease;
+    transition: width 0.18s ease;
 }
 
 .sidebar-header {
@@ -133,7 +133,12 @@ html {
 /* ===== Collapsed Sidebar ===== */
 .provider-sidebar.collapsed {
     width: 80px;
-    transition: width 0.3s ease;
+
+}
+.sidebar-menu span,
+.sidebar-header h4,
+.sidebar-header small {
+    white-space: nowrap;
 }
 
 .provider-sidebar.collapsed .sidebar-header h4,
@@ -226,4 +231,26 @@ object-fit: cover;
     .footer-right a {
         margin: 0 8px;
     }
+}
+
+/* PAGE TRANSITION */
+.provider-main {
+    animation: pageFade 0.18s ease;
+}
+
+@keyframes pageFade {
+    from {
+        opacity: 0.96;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* ACTIVE SIDEBAR */
+.active-sidebar {
+    background: #1f2937;
+    border-left: 4px solid #3b82f6;
+    color: #ffffff !important;
 }
