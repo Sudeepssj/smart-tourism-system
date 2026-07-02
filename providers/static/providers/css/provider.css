@@ -20,12 +20,12 @@ html {
 /* ===== Sidebar ===== */
 .provider-sidebar {
     width: 260px;
+    min-width: 260px;
     background: #111827;
-    color: #ffffff;
+    color: #fff;
     display: flex;
     flex-direction: column;
     padding-top: 20px;
-    transition: width 0.18s ease;
 }
 
 .sidebar-header {
@@ -71,7 +71,7 @@ html {
 .sidebar-menu a:hover {
     background: #1f2937;
     color: #ffffff;
-    border-left: 4px solid #3b82f6;
+    
 }
 
 /* ===== Main Section ===== */
@@ -128,31 +128,6 @@ html {
     justify-content: center;
     color: #fff;
     font-size: 18px;
-}
-
-/* ===== Collapsed Sidebar ===== */
-.provider-sidebar.collapsed {
-    width: 80px;
-
-}
-.sidebar-menu span,
-.sidebar-header h4,
-.sidebar-header small {
-    white-space: nowrap;
-}
-
-.provider-sidebar.collapsed .sidebar-header h4,
-.provider-sidebar.collapsed .sidebar-header small,
-.provider-sidebar.collapsed .sidebar-menu span {
-    display: none;
-}
-
-.provider-sidebar.collapsed .sidebar-menu a {
-    justify-content: center;
-}
-
-.provider-sidebar.collapsed .sidebar-menu a i {
-    margin: 0;
 }
 
 
@@ -253,4 +228,12 @@ object-fit: cover;
     background: #1f2937;
     border-left: 4px solid #3b82f6;
     color: #ffffff !important;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table {
+    margin-bottom: 0;
 }

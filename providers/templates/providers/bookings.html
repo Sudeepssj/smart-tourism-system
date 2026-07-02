@@ -2,9 +2,11 @@
 
 {% block content %}
 
-<div class="container-fluid">
+<div>
 
 <h3 class="mb-4">Bookings</h3>
+
+<div class="table-responsive">
 
 <table class="table table-bordered table-hover">
 
@@ -42,9 +44,9 @@
 <td>
 
 {% if booking.check_in %}
-{{ booking.check_in }} → {{ booking.check_out }}
+{{ booking.check_in|date:"d M Y" }} → {{ booking.check_out|date:"d M Y" }}
 {% else %}
-{{ booking.booking_date }}
+{{ booking.booking_date|date:"d M Y" }}
 {% endif %}
 
 </td>
@@ -103,6 +105,8 @@ No bookings yet
 </tbody>
 
 </table>
+
+</div>
 
 </div>
 
