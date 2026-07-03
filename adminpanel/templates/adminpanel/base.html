@@ -84,7 +84,7 @@
 
             <li class="sidebar-item">
 
-                <a title="Categories" onclick="if(document.getElementById('sidebar').classList.contains('collapsed')) return false;" class=" sidebar-link d-flex justify-content-between align-items-center {% if request.resolver_match.url_name == 'admin_main_categories' or request.resolver_match.url_name == 'admin_sub_categories' %} active{% endif %}" data-bs-toggle="collapse" href="#categoryMenu">
+                <a title="Categories"  class=" sidebar-link d-flex justify-content-between align-items-center {% if request.resolver_match.url_name == 'admin_main_categories' or request.resolver_match.url_name == 'admin_sub_categories' %} active{% endif %}" data-bs-toggle="collapse" href="#categoryMenu">
 
                     <i class="fas fa-layer-group me-2"></i><span> Categories</span>
                     <i class="fas fa-chevron-down small"></i>
@@ -116,7 +116,7 @@
                 <a title="Districts" class="sidebar-link d-flex justify-content-between align-items-center 
 {% if request.resolver_match.url_name == 'add_district' or request.resolver_match.url_name == 'district_list' %}active{% endif %}"
 data-bs-toggle="collapse"
-href="#districtMenu" onclick="if(document.getElementById('sidebar').classList.contains('collapsed')) return false;">
+href="#districtMenu">
                     <i class="fas fa-map-marker-alt me-2"></i><span> Districts</span>
                     <i class="fas fa-chevron-down small"></i>
                 </a>
@@ -149,18 +149,13 @@ href="#districtMenu" onclick="if(document.getElementById('sidebar').classList.co
         </ul>
     </nav>
 
-    <!-- Overlay (Mobile) -->
-    <div id="sidebar-overlay"></div>
+    
 
     <!-- Main Content -->
     <div id="main-content">
 
         <!-- Top Navbar -->
         <div class="topbar">
-            <button id="sidebarToggle" class="toggle-btn">
-                <i class="fas fa-bars"></i>
-            </button>
-
             <div class="welcome-text">
                 👋 Welcome, {{ request.user.username }}
             </div>

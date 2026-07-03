@@ -19,8 +19,8 @@ html {
 
 /* ===== Sidebar ===== */
 .provider-sidebar {
-    width: 260px;
-    min-width: 260px;
+    width: 230px;
+    min-width: 230px;
     background: #111827;
     color: #fff;
     display: flex;
