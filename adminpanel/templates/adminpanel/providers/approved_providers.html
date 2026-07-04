@@ -12,32 +12,34 @@
     </div>
 
     <div class="card-body p-0">
-        <table class="table table-hover mb-0">
-            <thead class="table-light">
-                <tr>
-                    <th>Name</th>
-                    <th>Title</th>
-                    <th>District</th>
-                </tr>
-            </thead>
-            <tbody id="approvedProviderTable">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Name</th>
+                        <th>Title</th>
+                        <th>District</th>
+                    </tr>
+                </thead>
+                <tbody id="approvedProviderTable">
 
-                {% for provider in providers %}
-                <tr>
-                    <td>{{ provider.business_name }}</td>
-                    <td>{{ provider.business_description }}</td>
-                    <td>{{ provider.district.name }}</td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="3" class="text-center p-3">
-                        No approved providers
-                    </td>
-                </tr>
-                {% endfor %}
+                    {% for provider in providers %}
+                    <tr>
+                        <td>{{ provider.business_name }}</td>
+                        <td>{{ provider.business_description }}</td>
+                        <td>{{ provider.district.name }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center p-3">
+                            No approved providers
+                        </td>
+                    </tr>
+                    {% endfor %}
 
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 

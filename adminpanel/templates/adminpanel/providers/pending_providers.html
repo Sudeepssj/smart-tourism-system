@@ -13,72 +13,72 @@ placeholder="Search providers...">
 </div>
 
 <div class="card-body p-0">
+<div class="table-responsive">
+    <table class="table table-hover mb-0">
 
-<table class="table table-hover mb-0">
+    <thead class="table-light">
+    <tr>
+    <th>Username</th>
+    <th>Business Name</th>
+    <th>District</th>
+    <th>Action</th>
+    </tr>
+    </thead>
 
-<thead class="table-light">
-<tr>
-<th>Username</th>
-<th>Business Name</th>
-<th>District</th>
-<th>Action</th>
-</tr>
-</thead>
+    <tbody id="providerTable">
 
-<tbody id="providerTable">
+    {% for provider in providers %}
 
-{% for provider in providers %}
+    <tr>
 
-<tr>
+    <td>{{ provider.user.username }}</td>
 
-<td>{{ provider.user.username }}</td>
+    <td>{{ provider.business_name }}</td>
 
-<td>{{ provider.business_name }}</td>
+    <td>{{ provider.district.name }}</td>
 
-<td>{{ provider.district.name }}</td>
+    <td>
 
-<td>
+    <button class="btn btn-info btn-sm viewBtn"
 
-<button class="btn btn-info btn-sm viewBtn"
+    data-username="{{ provider.user.username }}"
+    data-business="{{ provider.business_name }}"
+    data-phone="{{ provider.phone }}"
+    data-district="{{ provider.district.name }}"
+    data-address="{{ provider.full_address }}"
+    data-subcategory="{{ provider.subcategory.name }}">
 
-data-username="{{ provider.user.username }}"
-data-business="{{ provider.business_name }}"
-data-phone="{{ provider.phone }}"
-data-district="{{ provider.district.name }}"
-data-address="{{ provider.full_address }}"
-data-subcategory="{{ provider.subcategory.name }}">
+    View
 
-View
+    </button>
 
-</button>
+    <button class="btn btn-success btn-sm approveBtn"
+    data-id="{{ provider.id }}">
+    Approve
+    </button>
 
-<button class="btn btn-success btn-sm approveBtn"
-data-id="{{ provider.id }}">
-Approve
-</button>
+    <button class="btn btn-danger btn-sm rejectBtn"
+    data-id="{{ provider.id }}">
+    Reject
+    </button>
 
-<button class="btn btn-danger btn-sm rejectBtn"
-data-id="{{ provider.id }}">
-Reject
-</button>
+    </td>
 
-</td>
+    </tr>
 
-</tr>
+    {% empty %}
 
-{% empty %}
+    <tr>
+    <td colspan="4" class="text-center p-3">
+    No pending providers
+    </td>
+    </tr>
 
-<tr>
-<td colspan="4" class="text-center p-3">
-No pending providers
-</td>
-</tr>
+    {% endfor %}
 
-{% endfor %}
-
-</tbody>
-</table>
-
+    </tbody>
+    </table>
+</div>
 </div>
 </div>
 

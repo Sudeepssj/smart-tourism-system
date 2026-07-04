@@ -29,57 +29,58 @@ id="mainCategorySearch"
 class="form-control mb-3"
 placeholder="🔍 Search Main Category...">
 
-<table class="table table-bordered" id="mainCategoryTable">
+<div class="table-responsive">
+    <table class="table table-bordered" id="mainCategoryTable">
 
-<thead>
-<tr>
-<th>Sl No</th>
-<th>Name</th>
-<th>Actions</th>
-</tr>
-</thead>
+    <thead>
+    <tr>
+    <th>Sl No</th>
+    <th>Name</th>
+    <th>Actions</th>
+    </tr>
+    </thead>
 
-<tbody>
+    <tbody>
 
-{% for c in categories %}
+    {% for c in categories %}
 
-<tr>
+    <tr>
 
-<td>{{ forloop.counter }}</td>
+    <td>{{ forloop.counter }}</td>
 
-<td>{{ c.name }}</td>
+    <td>{{ c.name }}</td>
 
-<td>
+    <td>
 
-<a href="{% url 'edit_main_category' c.id %}"
-class="btn btn-sm btn-warning">
-Edit
-</a>
+    <a href="{% url 'edit_main_category' c.id %}"
+    class="btn btn-sm btn-warning">
+    Edit
+    </a>
 
-<a href="{% url 'delete_main_category' c.id %}"
-class="btn btn-sm btn-danger"
-onclick="return confirm('Delete this category?')">
-Delete
-</a>
+    <a href="{% url 'delete_main_category' c.id %}"
+    class="btn btn-sm btn-danger"
+    onclick="return confirm('Delete this category?')">
+    Delete
+    </a>
 
-</td>
+    </td>
 
-</tr>
+    </tr>
 
-{% empty %}
+    {% empty %}
 
-<tr>
-<td colspan="3" class="text-center">
-No categories found
-</td>
-</tr>
+    <tr>
+    <td colspan="3" class="text-center">
+    No categories found
+    </td>
+    </tr>
 
-{% endfor %}
+    {% endfor %}
 
-</tbody>
+    </tbody>
 
-</table>
-
+    </table>
+</div>
 <!-- jQuery Search Script -->
 
 <script>

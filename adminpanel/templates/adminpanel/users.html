@@ -26,12 +26,14 @@
 </div>
 
 <!-- 🔍 SEARCH + FILTER -->
-<div class="d-flex justify-content-between mb-3">
+<div class="row g-2 mb-3 align-items-center">
 
-    <input type="text" id="searchInput" class="form-control w-50"
-           placeholder="🔍 Search name or email...">
+    <div class="col-lg-6 col-12">
 
-    <div>
+        <input type="text" id="searchInput" class="form-control w-50"
+            placeholder="🔍 Search name or email...">
+    </div>
+    <div class="col-lg-6 col-12 text-lg-end">
         <button class="btn btn-outline-primary active" onclick="filterRole('all', event)">All</button>
         <button class="btn btn-outline-danger" onclick="filterRole('admin', event)">Admin</button>
         <button class="btn btn-outline-success" onclick="filterRole('user', event)">Users</button>
@@ -42,72 +44,74 @@
 </div>
 
 <!-- 📋 TABLE -->
-<table class="table table-bordered" id="userTable">
+<div class="table-responsive"> 
+    <table class="table table-bordered" id="userTable">
 
-<thead>
-<tr>
-    <th>Name</th>
-    <th>Email</th>
-    <th>Role</th>
-    <th>Main Category</th>
-    <th>Subcategory</th>
-    <th>Status</th>
-    <th>Action</th>
-</tr>
-</thead>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Main Category</th>
+        <th>Subcategory</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+    </thead>
 
-<tbody>
+    <tbody>
 
-{% for u in data %}
-<tr data-role="{{ u.role }}">
+    {% for u in data %}
+    <tr data-role="{{ u.role }}">
 
-<td>{{ u.name }}</td>
-<td>{{ u.email }}</td>
+    <td>{{ u.name }}</td>
+    <td>{{ u.email }}</td>
 
-<td>
-    {% if u.role == "admin" %}
-        <span class="badge bg-danger">Admin</span>
+    <td>
+        {% if u.role == "admin" %}
+            <span class="badge bg-danger">Admin</span>
 
-    {% elif u.role == "provider" %}
-        <span class="badge bg-warning">Provider</span>
+        {% elif u.role == "provider" %}
+            <span class="badge bg-warning">Provider</span>
 
-    {% else %}
-        <span class="badge bg-primary">User</span>
-    {% endif %}
-</td>
-
-<td>{{ u.main_category }}</td>
-<td>{{ u.subcategory }}</td>
-
-<!-- ✅ STATUS -->
-<td>
-    {% if u.is_active %}
-        <span class="badge bg-success">Active</span>
-    {% else %}
-        <span class="badge bg-danger">Disabled</span>
-    {% endif %}
-</td>
-
-<!-- ✅ ACTION -->
-<td>
-    <a href="{% url 'toggle_user_status' u.id %}"
-       class="btn btn-sm {% if u.is_active %}btn-danger{% else %}btn-success{% endif %}"
-       onclick="return confirm('Are you sure?')">
-
-        {% if u.is_active %}
-            Disable
         {% else %}
-            Enable
+            <span class="badge bg-primary">User</span>
         {% endif %}
-    </a>
-</td>
+    </td>
 
-</tr>
-{% endfor %}
+    <td>{{ u.main_category }}</td>
+    <td>{{ u.subcategory }}</td>
 
-</tbody>
+    <!-- ✅ STATUS -->
+    <td>
+        {% if u.is_active %}
+            <span class="badge bg-success">Active</span>
+        {% else %}
+            <span class="badge bg-danger">Disabled</span>
+        {% endif %}
+    </td>
 
-</table>
+    <!-- ✅ ACTION -->
+    <td>
+        <a href="{% url 'toggle_user_status' u.id %}"
+        class="btn btn-sm {% if u.is_active %}btn-danger{% else %}btn-success{% endif %}"
+        onclick="return confirm('Are you sure?')">
+
+            {% if u.is_active %}
+                Disable
+            {% else %}
+                Enable
+            {% endif %}
+        </a>
+    </td>
+
+    </tr>
+    {% endfor %}
+
+    </tbody>
+
+    </table>
+</div>    
 
 </div>
 
